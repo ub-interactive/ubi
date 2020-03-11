@@ -3,4 +3,4 @@
 target
 logs
 uploaded
-conf/application_prod.conf
+application_prod.conf
