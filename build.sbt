@@ -10,7 +10,9 @@ updateOptions := updateOptions.value.withCachedResolution(true)
 
 routesGenerator := InjectedRoutesGenerator
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala)
+lazy val root = (project in file("."))
+  .enablePlugins(PlayScala)
+  .disablePlugins(PlayLayoutPlugin)
 
 resolvers ++= Seq(
   Resolver.typesafeRepo("releases"),

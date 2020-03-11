@@ -1,12 +1,12 @@
-package com.ubi.services
-
+//package com.ubi.services
+//
 //import com.alipay.api._
-import javax.inject.Inject
-import play.api.Configuration
-
-/**
-  * Created by liangliao on 18/4/16.
-  */
+//import javax.inject.Inject
+//import play.api.Configuration
+//
+///**
+//  * Created by liangliao on 18/4/16.
+//  */
 //class AlipayService @Inject()(val configuration: Configuration) extends DefaultAlipayClient(
 //  configuration.get[String]("alipay.gateway"),
 //  configuration.get[String]("alipay.appId"),
