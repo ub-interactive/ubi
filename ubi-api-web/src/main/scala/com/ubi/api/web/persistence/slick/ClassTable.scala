@@ -1,15 +1,15 @@
-package com.ubi.persistence.slick
+package com.ubi.api.web.persistence.slick
+
+final case class ClassEntity(
+  hotelId: String,
+  projectId: String
+)
 
 trait ClassTable {
 
   self: Tables =>
 
   import profile.api._
-
-  final case class ClassEntity(
-    hotelId: String,
-    projectId: String
-  )
 
   class ClassTable(tag: Tag) extends Table[ClassEntity](tag, Some(Tables.SCHEMA_NAME), "hotel") {
     def * = {
@@ -26,7 +26,7 @@ trait ClassTable {
 
   }
 
-  object HotelRepository {
+  object ClassRepository {
     lazy val rows: TableQuery[ClassTable] = TableQuery[ClassTable]
   }
 

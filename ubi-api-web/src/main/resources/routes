@@ -1,0 +1,1 @@
+GET        /api/web        com.ubi.api.web.controllers.ApplicationController.index
