@@ -1,4 +1,4 @@
-package com.ubi.api.web
+package com.ubi.ccat
 
 import play.api.libs.json.{JsError, JsResult, JsSuccess}
 

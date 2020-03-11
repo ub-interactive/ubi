@@ -1,6 +1,6 @@
-package com.ubi.api.web.controllers
+package com.ubi.ccat.controllers
 
-import akka.Done
+import com.ubi.ccat.controllers.api.web.WebApiController
 import javax.inject.Inject
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.mvc.{Action, AnyContent}
@@ -14,7 +14,7 @@ class ApplicationController @Inject()(
 
   def index: Action[AnyContent] = {
     Action { implicit request =>
-      Done.ok
+      Ok
     }
   }
 }

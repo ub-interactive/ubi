@@ -1,4 +1,4 @@
-package com.ubi.api.web
+package com.ubi.ccat
 
 import javax.inject._
 import play.api._

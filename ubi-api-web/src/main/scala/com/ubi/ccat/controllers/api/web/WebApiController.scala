@@ -1,4 +1,6 @@
-package com.ubi.api.web.controllers
+package com.ubi.ccat.controllers.api.web
+
+import com.ubi.ccat.controllers.api.ApiController
 
 trait WebApiController extends ApiController {
   //
