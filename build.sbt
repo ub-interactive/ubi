@@ -51,8 +51,8 @@ lazy val `ubi-api-web` = (project in file("ubi-api-web"))
       "ch.qos.logback" % "logback-classic" % "1.2.3",
 
       /** database */
-      jdbc,
-      evolutions,
+//      jdbc,
+//      evolutions,
       "mysql" % "mysql-connector-java" % "8.0.19",
       "com.typesafe.slick" %% "slick" % slickVersion,
       "com.typesafe.slick" %% "slick-hikaricp" % slickVersion,
