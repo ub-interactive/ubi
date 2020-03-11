@@ -1,1 +1,3 @@
-GET        /        com.ubi.ccat.controllers.ApplicationController.index
+GET        /                    com.ubi.ccat.controllers.ApplicationController.index
+
+GET        /api/web/home        com.ubi.ccat.controllers.api.web.home.HomeController.index
