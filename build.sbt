@@ -24,7 +24,8 @@ resolvers ++= Seq(
 
 lazy val slickVersion = "3.3.2"
 lazy val playSlickVersion = "4.0.2"
-lazy val playSilhouette = playSilhouette
+lazy val playSilhouetteVersion = "7.0.0"
+lazy val weixinJavaVersion = "3.5.0"
 
 libraryDependencies ++= Seq(
   guice,
@@ -47,17 +48,17 @@ libraryDependencies ++= Seq(
   "com.github.etaty" %% "rediscala" % "1.9.0",
 
   /** auth */
-  "com.mohiva" %% "play-silhouette" % playSilhouette,
-  "com.mohiva" %% "play-silhouette-password-bcrypt" % playSilhouette,
-  "com.mohiva" %% "play-silhouette-crypto-jca" % playSilhouette,
-  "com.mohiva" %% "play-silhouette-persistence" % playSilhouette,
-  "com.mohiva" %% "play-silhouette-testkit" % playSilhouette % "test",
-  "com.mohiva" %% "play-silhouette-cas" % playSilhouette,
-  "com.mohiva" %% "play-silhouette-totp" % playSilhouette,
+  "com.mohiva" %% "play-silhouette" % playSilhouetteVersion,
+  "com.mohiva" %% "play-silhouette-password-bcrypt" % playSilhouetteVersion,
+  "com.mohiva" %% "play-silhouette-crypto-jca" % playSilhouetteVersion,
+  "com.mohiva" %% "play-silhouette-persistence" % playSilhouetteVersion,
+  "com.mohiva" %% "play-silhouette-testkit" % playSilhouetteVersion % "test",
+  "com.mohiva" %% "play-silhouette-cas" % playSilhouetteVersion,
+  "com.mohiva" %% "play-silhouette-totp" % playSilhouetteVersion,
 
   /** weixin api*/
-  "com.github.binarywang" % "weixin-java-mp" % "3.2.0",
-  "com.github.binarywang" % "weixin-java-pay" % "3.2.0",
-  "com.github.binarywang" % "weixin-java-open" % "3.2.0",
-  "com.github.binarywang" % "weixin-java-miniapp" % "3.2.0"
+  "com.github.binarywang" % "weixin-java-mp" % weixinJavaVersion,
+  "com.github.binarywang" % "weixin-java-pay" % weixinJavaVersion,
+  "com.github.binarywang" % "weixin-java-open" % weixinJavaVersion,
+  "com.github.binarywang" % "weixin-java-miniapp" % weixinJavaVersion
 )
