@@ -1,0 +1,64 @@
+# WWW
+GET           /                                                  controllers.www.ApplicationController.index()
+
+GET           /blog                                              controllers.www.ApplicationController.blog()
+
+GET           /account                                           controllers.www.AccountController.index()
+GET           /account/sign-in                                   controllers.www.AccountController.signIn(returnUrl: String ?= "/")
+GET           /account/sign-out                                  controllers.www.AccountController.signOut(returnUrl: String ?= "/")
+
+# API
+## auth
+POST          /api/auth/sign-in                                  controllers.api.auth.AuthenticationController.signIn
+GET           /api/auth/sign-out                                 controllers.api.auth.AuthenticationController.signOut
+POST          /api/auth/action-token/issue                       controllers.api.auth.ActionTokenController.issue
+POST          /api/auth/action-token/consume                     controllers.api.auth.ActionTokenController.consume
+
+## me
+GET           /api/user/me                                       controllers.api.user.MeController.profile
+POST          /api/user/me                                       controllers.api.user.MeController.update
+
+## user
+POST          /api/user/accounts/register                        controllers.api.user.AccountController.register
+GET           /api/user/accounts/:id                             controllers.api.user.AccountController.get(id: Long)
+GET           /api/user/accounts                                 controllers.api.user.AccountController.list(p: daos.EntityPager ?= daos.EntityPager(), f: filters.user.AccountFilter ?= filters.user.AccountFilter(), s: daos.EntitySorter ?= daos.EntitySorter())
+PUT           /api/user/accounts                                 controllers.api.user.AccountController.create
+POST          /api/user/accounts/:id                             controllers.api.user.AccountController.update(id: Long)
+DELETE        /api/user/accounts/:id                             controllers.api.user.AccountController.delete(id: Long)
+GET           /api/user/accounts/:id/next                        controllers.api.user.AccountController.next(id: Long)
+GET           /api/user/accounts/:id/prev                        controllers.api.user.AccountController.prev(id: Long)
+
+## wechat
+GET           /api/wechat/mp/javascriptRoutes                    controllers.api.wechat.MpController.javascriptRoutes
+GET           /api/wechat/mp/validateApiToken                    controllers.api.wechat.MpController.validateApiToken(signature: String, timestamp: String, nonce: String, echostr: String)
+GET           /api/wechat/mp/jsApiSignature                      controllers.api.wechat.MpController.jsApiSignature
+
+GET           /api/wechat/open/preauth                           controllers.api.wechat.OpenController.preauth(auth_code: Option[String])
+POST          /api/wechat/open/route                             controllers.api.wechat.OpenController.route(timestamp: String, nonce: String, signature: String, encrypt_type: String, msg_signature: String)
+
+## Miniapp
+
+
+## WolfLawOfficerGame
+GET           /api/biz/wolf-law-officer/connect                  controllers.api.biz.WolfLawOfficerGameController.connect(id: String)
+POST          /api/biz/wolf-law-officer/create                   controllers.api.biz.WolfLawOfficerGameController.create()
+GET           /api/biz/wolf-law-officer/join                     controllers.api.biz.WolfLawOfficerGameController.join(id: String)
+GET           /api/biz/wolf-law-officer/sit                      controllers.api.biz.WolfLawOfficerGameController.sit(id: String, seatNumber: Int, userId: String, userName: String)
+GET           /api/biz/wolf-law-officer/shuffle                  controllers.api.biz.WolfLawOfficerGameController.shuffle(id: String)
+GET           /api/biz/wolf-law-officer/action                   controllers.api.biz.WolfLawOfficerGameController.action(id: String, userId: String, targetUserId: String, skill: String)
+GET           /api/biz/wolf-law-officer/next-turn                controllers.api.biz.WolfLawOfficerGameController.nextTurn(id: String)
+
+## PartyGiftRandomizer
+GET           /api/biz/party-gift-randomizer/connect             controllers.api.biz.partyGiftRandomizer.ApplicationController.connect(id: Long)
+GET           /api/biz/party-gift-randomizer/session-info        controllers.api.biz.partyGiftRandomizer.ApplicationController.getSessionInfo(code: String)
+POST          /api/biz/party-gift-randomizer/get                 controllers.api.biz.partyGiftRandomizer.ApplicationController.get
+POST          /api/biz/party-gift-randomizer/create              controllers.api.biz.partyGiftRandomizer.ApplicationController.create
+GET           /api/biz/party-gift-randomizer/qrcode              controllers.api.biz.partyGiftRandomizer.ApplicationController.qrcode(id: Long, page: Option[String])
+POST          /api/biz/party-gift-randomizer/join                controllers.api.biz.partyGiftRandomizer.ApplicationController.join
+POST          /api/biz/party-gift-randomizer/get-ready           controllers.api.biz.partyGiftRandomizer.ApplicationController.getReady
+POST          /api/biz/party-gift-randomizer/start               controllers.api.biz.partyGiftRandomizer.ApplicationController.start
+POST          /api/biz/party-gift-randomizer/add-gift            controllers.api.biz.partyGiftRandomizer.ApplicationController.addGift
+POST          /api/biz/party-gift-randomizer/choose-gift         controllers.api.biz.partyGiftRandomizer.ApplicationController.chooseGift
+
+GET           /assets/*file                                      controllers.Assets.versioned(file)
+GET           /uploaded/*file                                    controllers.UploadedAssets.at(file)

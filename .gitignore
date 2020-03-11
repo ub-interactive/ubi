@@ -1,0 +1,6 @@
+.idea
+.DS_Store
+target
+logs
+uploaded
+conf/application_prod.conf
