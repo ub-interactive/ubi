@@ -97,9 +97,11 @@ trait ApiController extends InjectedController with HasDatabaseConfigProvider[Jd
 
   implicit def ec: ExecutionContext
 
-  implicit class JsValueValidationHelper(jsResult: JsResult[Future[Result]]) {
-    def catchErrors(implicit rh: RequestHeader): Future[Result] = {
-      jsResult.recoverTotal { jsError =>
+  implicit class JsValueValidationHelper[T <: ApiRequestData](jsResult: JsResult[ApiRequest[T]]) {
+    def process(processor: T => Future[Result]): Future[Result] = {
+      jsResult.map { apiRequest =>
+        processor(apiRequest.data)
+      }.recoverTotal { jsError =>
         val error = jsError.errors.map { case (path, errors) => s"${path.toString}: ${errors.map(_.messages.mkString(", ")).mkString(" ")}" }.mkString(" ")
         Future.successful(BadRequest(Json.toJson(ApiResponse(s"[JSON PARSE ERROR] $error"))))
       }
