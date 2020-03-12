@@ -2,6 +2,7 @@ package com.ubi.ccat.controllers.api.console.course
 
 import java.util.UUID
 
+import akka.Done
 import com.ubi.ccat.controllers.api.ApiRequest
 import com.ubi.ccat.controllers.api.web.WebApiController
 import com.ubi.ccat.persistence.slick.CourseEntity
@@ -129,5 +130,9 @@ class CourseController @Inject()(
         }
       ).ok
     }
+  }
+
+  def deleteCourse(courseId: UUID): Action[AnyContent] = Action.async { implicit request =>
+    db.run(CourseRepository.rows.filter(_.courseId === courseId).delete).map(_ => Done).ok
   }
 }

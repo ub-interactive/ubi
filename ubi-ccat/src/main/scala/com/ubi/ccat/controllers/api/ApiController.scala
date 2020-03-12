@@ -140,6 +140,12 @@ trait ApiController extends InjectedController with HasDatabaseConfigProvider[Jd
     }
   }
 
+  implicit class AsyncDoneHelper(data: Future[Done]) {
+    def ok(implicit rh: RequestHeader): Future[Result] = {
+      data.map(_.ok)
+    }
+  }
+
   implicit class AsyncApiResponseHelper[T <: ApiResponseData](data: Future[T])
     (implicit writes: Writes[T]) {
     def ok(implicit rh: RequestHeader): Future[Result] = {

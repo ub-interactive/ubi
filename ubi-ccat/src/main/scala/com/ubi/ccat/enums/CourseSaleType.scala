@@ -6,7 +6,11 @@ import play.api.mvc.QueryStringBindable.Parsing
 import slick.jdbc.JdbcType
 
 /* CourseSaleType */
-sealed abstract class CourseSaleTypeValue(val value: String) extends EnumAttributeValue[String]
+sealed abstract class CourseSaleTypeValue(val value: String) extends EnumAttributeValue[String] {
+  override def toString: String = {
+    value
+  }
+}
 
 object CourseSaleTypeValue {
   implicit def format: Format[CourseSaleTypeValue] = {
