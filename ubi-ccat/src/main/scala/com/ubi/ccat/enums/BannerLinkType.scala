@@ -26,8 +26,8 @@ object BannerLinkTypeValue {
   }
 
   implicit object BannerLinkTypeBindable extends Parsing[BannerLinkTypeValue](
-    param ⇒ BannerLinkType.fromValue(param).get, enum ⇒ enum.value,
-    (key: String, ex: Exception) ⇒ "Cannot parse parameter %s as BannerLinkType: %s".format(key, ex.getMessage)
+    param => BannerLinkType.fromValue(param).get, enum => enum.value,
+    (key: String, ex: Exception) => "Cannot parse parameter %s as BannerLinkType: %s".format(key, ex.getMessage)
   )
 
   implicit def columnMapper(implicit profile: slick.jdbc.JdbcProfile): JdbcType[BannerLinkTypeValue] = {

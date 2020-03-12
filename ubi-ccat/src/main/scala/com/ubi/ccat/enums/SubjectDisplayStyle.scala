@@ -26,8 +26,8 @@ object SubjectDisplayStyleValue {
   }
 
   implicit object SubjectDisplayStyleBindable extends Parsing[SubjectDisplayStyleValue](
-    param ⇒ SubjectDisplayStyle.fromValue(param).get, enum ⇒ enum.value,
-    (key: String, ex: Exception) ⇒ "Cannot parse parameter %s as SubjectDisplayStyle: %s".format(key, ex.getMessage)
+    param => SubjectDisplayStyle.fromValue(param).get, enum => enum.value,
+    (key: String, ex: Exception) => "Cannot parse parameter %s as SubjectDisplayStyle: %s".format(key, ex.getMessage)
   )
 
   implicit def columnMapper(implicit profile: slick.jdbc.JdbcProfile): JdbcType[SubjectDisplayStyleValue] = {

@@ -9,8 +9,8 @@ import com.ubi.ccat.persistence.slick.CourseEntity.Tags
 import play.api.libs.json.{Json, OFormat}
 
 final case class GetHomeContentResponse(
-  banners: Seq[GetHomeContentResponse.Banner],
-  subjects: Seq[GetHomeContentResponse.Subject]
+  banners: Iterable[GetHomeContentResponse.Banner],
+  subjects: Iterable[GetHomeContentResponse.Subject]
 ) extends ApiResponseData
 
 object GetHomeContentResponse {
@@ -18,10 +18,16 @@ object GetHomeContentResponse {
 
   final case class Banner(
     coverUrl: String,
-    bannerLinkType: BannerLinkTypeValue
+    bannerLinkType: BannerLinkTypeValue,
+    subjectId: UUID
   )
 
+  object Banner {
+    implicit val format: OFormat[Banner] = Json.format[Banner]
+  }
+
   final case class Subject(
+    subjectId: UUID,
     title: String,
     displayStyle: SubjectDisplayStyleValue,
     courses: Seq[Subject.Course]
