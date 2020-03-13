@@ -1,4 +1,5 @@
 GET         /                                 com.ubi.ccat.controllers.ApplicationController.index
+GET         /files/*path                      com.ubi.ccat.controllers.ApplicationController.file(path)
 
 GET         /api/web/home                     com.ubi.ccat.controllers.api.web.home.HomeController.index
 
