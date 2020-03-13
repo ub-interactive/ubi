@@ -50,7 +50,7 @@ class HomeController @Inject()(
                 courseId = course.courseId,
                 title = course.title,
                 subtitle = course.subtitle,
-                thumbnailUrl = course.thumbnailUrl,
+                thumbnailUrl = course.thumbnailUrl.map(com.ubi.ccat.controllers.routes.ApplicationController.file(_).absoluteURL()),
                 price = course.price,
                 promotionPrice = course.promotionPrice,
                 saleType = course.saleType,
