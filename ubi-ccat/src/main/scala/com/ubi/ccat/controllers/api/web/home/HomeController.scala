@@ -21,7 +21,7 @@ class HomeController @Inject()(
     Action.async { implicit request =>
 
       val courses = CourseRepository.rows
-        .join(CourseSubjectRepository.rows).on(_.courseId === _.subjectId)
+        .join(CourseSubjectRepository.rows).on(_.courseId === _.courseId)
         .join(SubjectRepository.rows).on(_._2.subjectId === _.subjectId)
         .map { case ((course, _), subject) => (subject, course) }
 

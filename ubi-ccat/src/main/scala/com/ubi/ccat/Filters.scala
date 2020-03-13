@@ -1,25 +1,12 @@
 package com.ubi.ccat
 
+import com.ubi.ccat.filters.LoggingFilter
 import javax.inject._
 import play.api._
-import play.api.http.HttpFilters
-import play.api.mvc.EssentialFilter
-import play.filters.cors.CORSFilter
-import play.filters.gzip.GzipFilter
-import play.filters.headers.SecurityHeadersFilter
+import play.api.http.{DefaultHttpFilters, EnabledFilters}
 
-@Singleton
 class Filters @Inject()(
   environment: Environment,
-  corsFilter: CORSFilter,
-  securityHeadersFilter: SecurityHeadersFilter,
-  gzipFilter: GzipFilter
-) extends HttpFilters {
-
-  override val filters: Seq[EssentialFilter] = {
-    if (environment.mode == Mode.Dev) Seq.empty else {
-      Seq(gzipFilter, corsFilter)
-    }
-  }
-
-}
+  defaultFilters: EnabledFilters,
+  logFilter: LoggingFilter
+) extends DefaultHttpFilters(defaultFilters.filters :+ logFilter: _*)
