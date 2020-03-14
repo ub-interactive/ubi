@@ -1,23 +1,22 @@
-package com.ubi.ccat.controllers.api.web.subject
+package com.ubi.ccat.controllers.api.web.home
 
 import java.time.Instant
 import java.util.UUID
 
-import com.ubi.ccat.controllers.api.web.subject
-import com.ubi.ccat.controllers.api.{ApiResponseData, PaginationResponseData}
-import com.ubi.ccat.enums.CourseSaleTypeValue
+import com.ubi.ccat.controllers.api.ApiResponseData
+import com.ubi.ccat.enums.{CourseSaleTypeValue, SubjectDisplayStyleValue}
 import com.ubi.ccat.persistence.slick.CourseEntity.Tags
-import play.api.libs.json.{Json, OFormat, OWrites}
+import play.api.libs.json.{Json, OFormat}
 
 final case class GetSubjectResponse(
   subjectId: UUID,
   title: String,
-  courses: Iterable[subject.GetSubjectResponse.Course],
-  page: PaginationResponseData
+  displayStyle: SubjectDisplayStyleValue,
+  courses: Iterable[GetSubjectResponse.Course]
 ) extends ApiResponseData
 
 object GetSubjectResponse {
-  implicit val writes: OWrites[GetSubjectResponse] = Json.writes[GetSubjectResponse]
+  implicit val format: OFormat[GetSubjectResponse] = Json.format[GetSubjectResponse]
 
   final case class Course(
     courseId: UUID,
@@ -37,5 +36,3 @@ object GetSubjectResponse {
   }
 
 }
-
-

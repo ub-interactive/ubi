@@ -1,8 +1,10 @@
 GET         /                                 com.ubi.ccat.controllers.ApplicationController.index
 GET         /files/*path                      com.ubi.ccat.controllers.ApplicationController.file(path)
 
-GET         /api/web                          com.ubi.ccat.controllers.api.web.home.HomeController.index
-GET         /api/web/s/:subject_id            com.ubi.ccat.controllers.api.web.subject.SubjectController.getSubject(subject_id: java.util.UUID)
+GET         /api/web/h                        com.ubi.ccat.controllers.api.web.home.HomeController.index
+GET         /api/web/h/s/:subject_id          com.ubi.ccat.controllers.api.web.home.HomeController.getSubject(subject_id: java.util.UUID)
+
+GET         /api/web/s/:subject_id            com.ubi.ccat.controllers.api.web.subject.SubjectController.getSubject(subject_id: java.util.UUID, page: com.ubi.ccat.controllers.api.PaginationParameter)
 
 GET         /api/console/course/list          com.ubi.ccat.controllers.api.console.course.CourseController.listCourse
 POST        /api/console/course/update        com.ubi.ccat.controllers.api.console.course.CourseController.updateCourse(course_id : java.util.UUID)

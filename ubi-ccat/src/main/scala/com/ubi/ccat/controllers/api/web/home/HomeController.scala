@@ -20,14 +20,10 @@ class HomeController @Inject()(
   def index: Action[AnyContent] = {
     Action.async { implicit request =>
 
-      val courses = CourseRepository.rows
-        .join(CourseSubjectRepository.rows).on(_.courseId === _.courseId)
-        .join(SubjectRepository.rows).on(_._2.subjectId === _.subjectId)
-        .join(HomeSubjectRepository.rows).on(_._2.subjectId === _.subjectId)
-        .map { case (((course, _), subject), homeSubject) => ((subject, homeSubject.subjectDisplayStyle, homeSubject.displayOrder), course) }
+      val subjects = HomeSubjectRepository.rows.sortBy(_.displayOrder.asc).map(_.subjectId)
 
       for {
-        courses <- db.run(courses.result)
+        subjects <- db.run(subjects.result)
       } yield GetHomeContentResponse(
         banners = Seq(
           GetHomeContentResponse.Banner(
@@ -41,13 +37,31 @@ class HomeController @Inject()(
             subjectId = UUID.fromString("1710adb1-c692-408c-922e-f918664289d4")
           )
         ),
-        subjects = courses.groupBy(_._1).toSeq.sortBy(_._1._3).map { case ((subject, subjectDisplayStyle, _), courses) =>
-          GetHomeContentResponse.Subject(
+        subjectIds = subjects
+      ).ok
+    }
+  }
+
+  def getSubject(subjectId: UUID): Action[AnyContent] = {
+    Action.async { implicit request =>
+      val courses = CourseRepository.rows
+        .join(CourseSubjectRepository.rows).on(_.courseId === _.courseId)
+        .join(SubjectRepository.rows).on(_._2.subjectId === _.subjectId)
+        .join(HomeSubjectRepository.rows).on(_._2.subjectId === _.subjectId)
+        .filter(_._2.subjectId === subjectId)
+        .map { case (((course, _), subject), homeSubject) => ((subject, homeSubject.subjectDisplayStyle), course) }
+
+      for {
+        courses <- db.run(courses.result)
+      } yield courses.groupBy(_._1).headOption match {
+        case Some(value) =>
+          val ((subject, displayStyle), courses) = value
+          GetSubjectResponse(
             subjectId = subject.subjectId,
             title = subject.title,
-            displayStyle = subjectDisplayStyle,
+            displayStyle = displayStyle,
             courses = courses.map { case (_, course) =>
-              GetHomeContentResponse.Subject.Course(
+              GetSubjectResponse.Course(
                 courseId = course.courseId,
                 title = course.title,
                 subtitle = course.subtitle,
@@ -59,9 +73,9 @@ class HomeController @Inject()(
                 flashSaleStartAt = course.flashSaleStartAt,
                 flashSaleEndAt = course.flashSaleEndAt)
             }
-          )
-        }
-      ).ok
+          ).ok
+        case None => NotFound
+      }
     }
   }
 }

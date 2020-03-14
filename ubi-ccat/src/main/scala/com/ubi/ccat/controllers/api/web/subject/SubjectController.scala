@@ -3,6 +3,7 @@ package com.ubi.ccat.controllers.api.web.subject
 import java.util.UUID
 
 import com.ubi.ccat.controllers.api.web.WebApiController
+import com.ubi.ccat.controllers.api.{PaginationParameter, PaginationResponseData}
 import com.ubi.ccat.persistence.slick.Tables._
 import com.ubi.ccat.persistence.slick.Tables.profile.api._
 import javax.inject.Inject
@@ -16,7 +17,10 @@ class SubjectController @Inject()(
 )
   (implicit val ec: ExecutionContext) extends WebApiController {
 
-  def getSubject(subjectId: UUID): Action[AnyContent] = {
+  def getSubject(
+    subjectId: UUID,
+    page: PaginationParameter
+  ): Action[AnyContent] = {
     Action.async { implicit request =>
 
       val courses = CourseRepository.rows
@@ -26,7 +30,8 @@ class SubjectController @Inject()(
         .map { case ((course, _), subject) => (subject, course) }
 
       for {
-        courses <- db.run(courses.result)
+        total <- db.run(courses.size.result)
+        courses <- db.run(courses.drop(page.offset).take(page.limit).result)
       } yield courses.groupBy(_._1).headOption match {
         case Some(value) =>
           val (subject, courses) = value
@@ -45,7 +50,12 @@ class SubjectController @Inject()(
                 tags = course.tags,
                 flashSaleStartAt = course.flashSaleStartAt,
                 flashSaleEndAt = course.flashSaleEndAt)
-            }
+            },
+            page = PaginationResponseData(
+              page = page.page,
+              size = page.size,
+              totalRecords = total
+            )
           ).ok
         case None => NotFound
       }
