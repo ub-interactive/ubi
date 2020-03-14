@@ -52,7 +52,7 @@ object PaginationResponseData {
     JsObject(Seq(
       "page" -> JsNumber(o.page),
       "size" -> JsNumber(o.size),
-      "pages" -> JsNumber(o.totalRecords / o.size)
+      "pages" -> JsNumber(Math.ceil(o.totalRecords.toDouble / o.size).toInt)
     ))
   }
 }
