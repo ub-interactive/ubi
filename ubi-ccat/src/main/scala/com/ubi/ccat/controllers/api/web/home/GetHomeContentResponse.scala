@@ -30,7 +30,7 @@ object GetHomeContentResponse {
     subjectId: UUID,
     title: String,
     displayStyle: SubjectDisplayStyleValue,
-    courses: Seq[Subject.Course]
+    courses: Iterable[Subject.Course]
   )
 
   object Subject {

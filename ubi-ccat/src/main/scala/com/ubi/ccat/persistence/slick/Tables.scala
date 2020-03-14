@@ -8,7 +8,8 @@ object Tables extends Tables {
 trait Tables
   extends CourseTable
     with SubjectTable
-    with CourseSubjectTable {
+    with CourseSubjectTable
+    with HomeSubjectTable {
 
   val profile: slick.jdbc.JdbcProfile
 
@@ -17,7 +18,8 @@ trait Tables
   lazy val schema: profile.SchemaDescription = List(
     CourseRepository.rows.schema,
     SubjectRepository.rows.schema,
-    CourseSubjectRepository.rows.schema
+    CourseSubjectRepository.rows.schema,
+    HomeSubjectRepository.rows.schema
   ).reduceLeft(_ ++ _)
 
   @deprecated("Use .schema instead of .ddl", "3.0")

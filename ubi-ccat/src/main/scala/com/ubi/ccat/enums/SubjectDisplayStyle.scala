@@ -44,7 +44,7 @@ object SubjectDisplayStyle extends EnumAttribute[SubjectDisplayStyleValue] {
 
   protected def all: Seq[SubjectDisplayStyleValue] = {
     Seq[SubjectDisplayStyleValue](
-      OneColumn
+      OneColumn, TwoColumn
     )
   }
 }
