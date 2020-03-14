@@ -7,8 +7,7 @@ import com.ubi.ccat.enums.BannerLinkTypeValue
 import play.api.libs.json.{Json, OFormat}
 
 final case class GetHomeContentResponse(
-  banners: Iterable[GetHomeContentResponse.Banner],
-  subjectIds: Iterable[UUID]
+  banners: Iterable[GetHomeContentResponse.Banner]
 ) extends ApiResponseData
 
 object GetHomeContentResponse {

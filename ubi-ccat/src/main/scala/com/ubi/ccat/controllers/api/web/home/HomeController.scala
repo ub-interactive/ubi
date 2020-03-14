@@ -3,6 +3,7 @@ package com.ubi.ccat.controllers.api.web.home
 import java.util.UUID
 
 import com.ubi.ccat.controllers.api.web.WebApiController
+import com.ubi.ccat.controllers.api.{PaginationParameter, PaginationResponseData}
 import com.ubi.ccat.enums.BannerLinkType
 import com.ubi.ccat.persistence.slick.Tables._
 import com.ubi.ccat.persistence.slick.Tables.profile.api._
@@ -18,13 +19,8 @@ class HomeController @Inject()(
   (implicit val ec: ExecutionContext) extends WebApiController {
 
   def index: Action[AnyContent] = {
-    Action.async { implicit request =>
-
-      val subjects = HomeSubjectRepository.rows.sortBy(_.displayOrder.asc).map(_.subjectId)
-
-      for {
-        subjects <- db.run(subjects.result)
-      } yield GetHomeContentResponse(
+    Action { implicit request =>
+      GetHomeContentResponse(
         banners = Seq(
           GetHomeContentResponse.Banner(
             coverUrl = com.ubi.ccat.controllers.routes.ApplicationController.file("banner_01.png").absoluteURL(),
@@ -36,46 +32,55 @@ class HomeController @Inject()(
             bannerLinkType = BannerLinkType.Subject,
             subjectId = UUID.fromString("1710adb1-c692-408c-922e-f918664289d4")
           )
-        ),
-        subjectIds = subjects
+        )
       ).ok
     }
   }
 
-  def getSubject(subjectId: UUID): Action[AnyContent] = {
+  def getSubject(page: PaginationParameter): Action[AnyContent] = {
     Action.async { implicit request =>
-      val courses = CourseRepository.rows
+      val homeSubjects = HomeSubjectRepository.rows.sortBy(_.displayOrder.asc)
+
+      def courses(subjectIds: Seq[UUID]) = CourseRepository.rows
         .join(CourseSubjectRepository.rows).on(_.courseId === _.courseId)
         .join(SubjectRepository.rows).on(_._2.subjectId === _.subjectId)
         .join(HomeSubjectRepository.rows).on(_._2.subjectId === _.subjectId)
-        .filter(_._2.subjectId === subjectId)
-        .map { case (((course, _), subject), homeSubject) => ((subject, homeSubject.subjectDisplayStyle), course) }
+        .filter(_._2.subjectId inSet subjectIds)
+        .map { case (((course, _), subject), homeSubject) => ((subject, homeSubject.subjectDisplayStyle, homeSubject.displayOrder), course) }
 
       for {
-        courses <- db.run(courses.result)
-      } yield courses.groupBy(_._1).headOption match {
-        case Some(value) =>
-          val ((subject, displayStyle), courses) = value
-          GetSubjectResponse(
-            subjectId = subject.subjectId,
-            title = subject.title,
-            displayStyle = displayStyle,
-            courses = courses.map { case (_, course) =>
-              GetSubjectResponse.Course(
-                courseId = course.courseId,
-                title = course.title,
-                subtitle = course.subtitle,
-                thumbnailUrl = course.thumbnailUrl.map(com.ubi.ccat.controllers.routes.ApplicationController.file(_).absoluteURL()),
-                price = course.price,
-                promotionPrice = course.promotionPrice,
-                saleType = course.saleType,
-                tags = course.tags,
-                flashSaleStartAt = course.flashSaleStartAt,
-                flashSaleEndAt = course.flashSaleEndAt)
-            }
-          ).ok
-        case None => NotFound
-      }
+        total <- db.run(homeSubjects.size.result)
+        subjectIds <- db.run(homeSubjects.drop(page.offset).take(page.limit).map(_.subjectId).result)
+        courses <- db.run(courses(subjectIds).result)
+      } yield GetSubjectResponse(
+        subjects = courses.groupBy(_._1).toSeq.sortBy(_._1._3).map {
+          case ((subject, displayStyle, _), courses) =>
+            GetSubjectResponse.Subject(
+              subjectId = subject.subjectId,
+              title = subject.title,
+              displayStyle = displayStyle,
+              courses = courses.map { case (_, course) =>
+                GetSubjectResponse.Subject.Course(
+                  courseId = course.courseId,
+                  title = course.title,
+                  subtitle = course.subtitle,
+                  thumbnailUrl = course.thumbnailUrl.map(com.ubi.ccat.controllers.routes.ApplicationController.file(_).absoluteURL()),
+                  price = course.price,
+                  promotionPrice = course.promotionPrice,
+                  saleType = course.saleType,
+                  tags = course.tags,
+                  flashSaleStartAt = course.flashSaleStartAt,
+                  flashSaleEndAt = course.flashSaleEndAt)
+              }
+            )
+        },
+        page = PaginationResponseData(
+          page = page.page,
+          size = page.size,
+          totalRecords = total
+        )
+      ).ok
     }
   }
+
 }
