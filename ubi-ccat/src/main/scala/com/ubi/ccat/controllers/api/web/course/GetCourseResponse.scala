@@ -12,7 +12,6 @@ final case class GetCourseResponse(
   courseId: UUID,
   title: String,
   subtitle: Option[String],
-  thumbnailUrl: Option[String],
   coverUrl: String,
   price: Int,
   promotionPrice: Option[Int],
