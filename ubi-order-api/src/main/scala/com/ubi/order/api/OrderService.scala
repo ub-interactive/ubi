@@ -2,7 +2,7 @@ package com.ubi.order.api
 
 import com.lightbend.lagom.scaladsl.api.{Descriptor, Service, ServiceCall}
 
-class OrderService extends Service {
+trait OrderService extends Service {
 
   def createOrder: ServiceCall[CreateOrderRequest, CreateOrderResponse]
 
