@@ -2,7 +2,8 @@ package com.ubi.ccat.controllers.api
 
 import akka.Done
 import com.ubi.ccat.controllers.api.ApiResponse.{ApiResponseCode, ApiResponseCodeValue}
-import com.ubi.ccat.{EnumAttribute, EnumAttributeValue}
+import com.ubi.ccat.EnumAttributeValue
+import com.ubi.ccat.enums.{EnumAttribute, EnumAttributeValue}
 import play.api.db.slick.HasDatabaseConfigProvider
 import play.api.i18n.I18nSupport
 import play.api.libs.json._

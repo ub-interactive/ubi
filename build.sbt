@@ -32,7 +32,7 @@ lazy val weixinJavaVersion = "3.5.0"
 
 lazy val `ubi` = project in file(".")
 
-/* ubi-api-web */
+/* ubi */
 lazy val `ubi-ccat` = (project in file("ubi-ccat"))
   .enablePlugins(PlayScala)
   .disablePlugins(PlayLayoutPlugin)
@@ -42,7 +42,7 @@ lazy val `ubi-ccat` = (project in file("ubi-ccat"))
     sources in(Compile, doc) := Seq.empty,
     publishArtifact in(Compile, packageDoc) := false,
     organization := "com.ubi.api",
-    name := "ubi-api-web",
+    name := "ubi-ccat",
     libraryDependencies ++= Seq(
       guice,
       ws,
@@ -80,43 +80,78 @@ lazy val `ubi-ccat` = (project in file("ubi-ccat"))
     )
   )
 
-///* finance */
-//lazy val `ubi-connect-finance-api` = (project in file("ubi-finance-api"))
-//  .settings(scalaVersion := "2.13.1",
-//    maintainer := "83225506@qq.com",
-//    sources in(Compile, doc) := Seq.empty,
-//    publishArtifact in(Compile, packageDoc) := false,
-//    organization := "com.ubi.finance",
-//    name := "ubi-finance-api",
-//    libraryDependencies ++= Seq(
-//      lagomScaladslApi
-//    )
-//  )
-//
-//lazy val `ubi-connect-finance-impl` = (project in file("ubi-finance-impl"))
-//  .enablePlugins(LagomScala)
-//  .settings(
-//    scalaVersion := "2.13.1",
-//    maintainer := "83225506@qq.com",
-//    sources in(Compile, doc) := Seq.empty,
-//    publishArtifact in(Compile, packageDoc) := false,
-//    organization := "com.ubi.finance",
-//    name := "ubi-finance-impl",
-//    mappings in Universal ++= {
-//      mapFiles((resourceDirectory in Compile).value, "conf")
-//    },
-//    libraryDependencies ++= Seq(
-//      lagomScaladslAkkaDiscovery,
-//      lagomScaladslKafkaBroker,
-//      lagomScaladslPersistenceCassandra,
-//      lagomScaladslPersistenceJdbc,
-//      "com.softwaremill.macwire" %% "macros" % "2.3.3" % "provided",
-//      "com.github.jnr" % "jnr-ffi" % "2.1.11",
-//      "com.github.etaty" %% "rediscala" % "1.9.0"
-//    )
-//  )
-//  .dependsOn(`ubi-connect-finance-api`)
 
+/* order */
+lazy val `ubi-order-api` = (project in file("ubi-order-api"))
+  .settings(scalaVersion := "2.13.1",
+    maintainer := "83225506@qq.com",
+    sources in(Compile, doc) := Seq.empty,
+    publishArtifact in(Compile, packageDoc) := false,
+    organization := "com.ubi.order",
+    name := "ubi-order-api",
+    libraryDependencies ++= Seq(
+      lagomScaladslApi
+    )
+  )
+
+lazy val `ubi-order-impl` = (project in file("ubi-order-impl"))
+  .enablePlugins(LagomScala)
+  .settings(
+    scalaVersion := "2.13.1",
+    maintainer := "83225506@qq.com",
+    sources in(Compile, doc) := Seq.empty,
+    publishArtifact in(Compile, packageDoc) := false,
+    organization := "com.ubi.order",
+    name := "ubi-order-impl",
+    mappings in Universal ++= {
+      mapFiles((resourceDirectory in Compile).value, "conf")
+    },
+    libraryDependencies ++= Seq(
+      lagomScaladslKafkaBroker,
+      lagomScaladslPersistenceJdbc,
+      "mysql" % "mysql-connector-java" % "8.0.19",
+      "com.softwaremill.macwire" %% "macros" % "2.3.3" % "provided",
+      "com.github.jnr" % "jnr-ffi" % "2.1.11",
+      "com.github.etaty" %% "rediscala" % "1.9.0"
+    )
+  )
+  .dependsOn(`ubi-order-api`)
+
+/* finance */
+lazy val `ubi-finance-api` = (project in file("ubi-finance-api"))
+  .settings(scalaVersion := "2.13.1",
+    maintainer := "83225506@qq.com",
+    sources in(Compile, doc) := Seq.empty,
+    publishArtifact in(Compile, packageDoc) := false,
+    organization := "com.ubi.finance",
+    name := "ubi-finance-api",
+    libraryDependencies ++= Seq(
+      lagomScaladslApi
+    )
+  )
+
+lazy val `ubi-finance-impl` = (project in file("ubi-finance-impl"))
+  .enablePlugins(LagomScala)
+  .settings(
+    scalaVersion := "2.13.1",
+    maintainer := "83225506@qq.com",
+    sources in(Compile, doc) := Seq.empty,
+    publishArtifact in(Compile, packageDoc) := false,
+    organization := "com.ubi.finance",
+    name := "ubi-finance-impl",
+    mappings in Universal ++= {
+      mapFiles((resourceDirectory in Compile).value, "conf")
+    },
+    libraryDependencies ++= Seq(
+      lagomScaladslKafkaBroker,
+      lagomScaladslPersistenceJdbc,
+      "mysql" % "mysql-connector-java" % "8.0.19",
+      "com.softwaremill.macwire" %% "macros" % "2.3.3" % "provided",
+      "com.github.jnr" % "jnr-ffi" % "2.1.11",
+      "com.github.etaty" %% "rediscala" % "1.9.0"
+    )
+  )
+  .dependsOn(`ubi-finance-api`)
 
 /** helpers */
 def mapFiles(

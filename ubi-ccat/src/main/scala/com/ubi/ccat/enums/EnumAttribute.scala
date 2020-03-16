@@ -1,4 +1,4 @@
-package com.ubi.ccat
+package com.ubi.ccat.enums
 
 import play.api.libs.json.{JsError, JsResult, JsSuccess}
 
