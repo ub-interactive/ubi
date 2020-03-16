@@ -7,22 +7,13 @@ import play.api.db.slick.HasDatabaseConfigProvider
 import play.api.i18n.I18nSupport
 import play.api.libs.json._
 import play.api.mvc._
-import slick.dbio.DBIOAction
 import slick.jdbc.JdbcProfile
 
 import scala.collection.immutable.Seq
 import scala.concurrent.{ExecutionContext, Future}
 
+
 trait ApiRequestData
-
-trait ApiResponseData
-
-case object EmptyApiResponseData extends ApiResponseData {
-  implicit val format: Format[EmptyApiResponseData.type] = Format[EmptyApiResponseData.type](
-    Reads[EmptyApiResponseData.type](_ => JsSuccess(EmptyApiResponseData)),
-    Writes[EmptyApiResponseData.type](_ => JsObject(Seq.empty))
-  )
-}
 
 final case class ApiRequest[T <: ApiRequestData](
   data: T
@@ -34,11 +25,19 @@ object ApiRequest {
   }
 }
 
-final case class ApiResponse[T <: ApiResponseData](
-  code: ApiResponseCodeValue = ApiResponseCode.OK,
-  data: Option[T],
-  error: Option[String]
-)
+trait ApiResponseData
+
+case object EmptyApiResponseData extends ApiResponseData {
+  implicit val format: Format[EmptyApiResponseData.type] = Format[EmptyApiResponseData.type](
+    Reads[EmptyApiResponseData.type](_ => JsSuccess(EmptyApiResponseData)),
+    Writes[EmptyApiResponseData.type](_ => JsObject(Seq.empty))
+  )
+}
+
+
+trait ApiResponse {
+  def code: ApiResponseCodeValue
+}
 
 object ApiResponse {
 
@@ -80,16 +79,37 @@ object ApiResponse {
     }
   }
 
-  def apply(error: String): ApiResponse[EmptyApiResponseData.type] = {
-    new ApiResponse[EmptyApiResponseData.type](code = ApiResponseCode.FAILED, data = None, error = Some(error))
+}
+
+final case class ApiResponseOk[T <: ApiResponseData](
+  code: ApiResponseCodeValue,
+  data: Option[T]
+) extends ApiResponse
+
+object ApiResponseOk {
+  implicit def writes[T <: ApiResponseData](implicit writes: Writes[T]): OWrites[ApiResponseOk[T]] = {
+    Json.writes[ApiResponseOk[T]]
   }
 
-  def apply[T <: ApiResponseData](data: T): ApiResponse[T] = {
-    new ApiResponse[T](code = ApiResponseCode.OK, Some(data), None)
+  def apply[T <: ApiResponseData](data: T): ApiResponseOk[T] = {
+    ApiResponseOk(code = ApiResponseCode.OK, Some(data))
+  }
+}
+
+final case class ApiResponseError(
+  code: ApiResponseCodeValue,
+  error: String
+) extends ApiResponse
+
+object ApiResponseError {
+  implicit val writes: OWrites[ApiResponseError] = Json.writes[ApiResponseError]
+
+  def apply(error: String): ApiResponseError = {
+    ApiResponseError(code = ApiResponseCode.FAILED, error = error)
   }
 
-  implicit def writes[T <: ApiResponseData](implicit writes: Writes[T]): OWrites[ApiResponse[T]] = {
-    Json.writes[ApiResponse[T]]
+  def apply(ex: Throwable): ApiResponseError = {
+    ApiResponseError(code = ApiResponseCode.FAILED, error = ex.getLocalizedMessage)
   }
 }
 
@@ -103,7 +123,7 @@ trait ApiController extends InjectedController with HasDatabaseConfigProvider[Jd
         processor(apiRequest.data)
       }.recoverTotal { jsError =>
         val error = jsError.errors.map { case (path, errors) => s"${path.toString}: ${errors.map(_.messages.mkString(", ")).mkString(" ")}" }.mkString(" ")
-        Future.successful(BadRequest(Json.toJson(ApiResponse(s"[JSON PARSE ERROR] $error"))))
+        Future.successful(BadRequest(Json.toJson(ApiResponseError(s"[JSON PARSE ERROR] $error"))))
       }
     }
   }
@@ -111,49 +131,48 @@ trait ApiController extends InjectedController with HasDatabaseConfigProvider[Jd
   /**
    * basic helpers
    */
-  implicit class DoneHelper(data: Done) {
-    def ok(implicit rh: RequestHeader): Result = {
-      Ok(Json.toJson(ApiResponse[EmptyApiResponseData.type](code = ApiResponseCode.OK, data = None, error = None)))
-    }
-  }
-
   implicit class ApiResponseHelper[T <: ApiResponseData](data: T)
     (implicit writes: Writes[T]) {
-    def ok(implicit rh: RequestHeader): Result = {
-      Ok(Json.toJson(ApiResponse[T](data = data)))
+    def ok(
+      implicit rh: RequestHeader
+    ): Result = {
+      Ok(Json.toJson(ApiResponseOk(data = data)))
     }
+  }
 
+  implicit class ApiDoneResponseHelper(data: Done.type) {
+    def ok(
+      implicit rh: RequestHeader
+    ): Result = {
+      Ok(Json.toJson(ApiResponseOk(data = EmptyApiResponseData)))
+    }
+  }
+
+  implicit class ApiExceptionResponseHelper[T <: Throwable](ex: T) {
     def error(implicit rh: RequestHeader): Result = {
-      BadRequest(Json.toJson(ApiResponse(error = data.toString)))
-    }
-  }
-
-  implicit class AsyncDBIOHelper[R <: ApiResponseData, S <: slick.dbio.NoStream, E <: slick.dbio.Effect](data: DBIOAction[R, S, E])
-    (implicit writes: Writes[R]) {
-    def run(implicit rh: RequestHeader): Future[Result] = {
-      db.run(data).ok
-    }
-
-    def runTransactionally(implicit rh: RequestHeader): Future[Result] = {
-      import profile.api._
-      db.run(data.transactionally).ok
-    }
-  }
-
-  implicit class AsyncDoneHelper(data: Future[Done]) {
-    def ok(implicit rh: RequestHeader): Future[Result] = {
-      data.map(_.ok)
+      BadRequest(Json.toJson(ApiResponseError(ex)))
     }
   }
 
   implicit class AsyncApiResponseHelper[T <: ApiResponseData](data: Future[T])
     (implicit writes: Writes[T]) {
-    def ok(implicit rh: RequestHeader): Future[Result] = {
+    def ok(
+      implicit rh: RequestHeader
+    ): Future[Result] = {
       data.map(_.ok)
+        .recover {
+          case ex: Throwable => ex.error
+        }
     }
+  }
 
-    def error(implicit rh: RequestHeader): Future[Result] = {
-      data.map(_.error)
+  implicit class AsyncApiDoneResponseHelper(data: Future[Done.type]) {
+    def ok(
+      implicit rh: RequestHeader
+    ): Future[Result] = {
+      data.map(_.ok).recover {
+        case ex: Throwable => ex.error
+      }
     }
   }
 

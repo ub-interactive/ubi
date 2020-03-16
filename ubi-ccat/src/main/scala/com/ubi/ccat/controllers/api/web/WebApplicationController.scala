@@ -9,6 +9,7 @@ import play.api.db.slick.DatabaseConfigProvider
 import play.api.mvc.{Action, AnyContent}
 
 import scala.concurrent.ExecutionContext
+import scala.util.Try
 
 class WebApplicationController @Inject()(
   environment: Environment,
@@ -19,14 +20,16 @@ class WebApplicationController @Inject()(
 
   def getWxJsApiConfig(url: String): Action[AnyContent] = {
     Action { implicit request =>
-      val jsApiSignature = wxMpService.createJsapiSignature(url)
-      GetWxJsApiConfigResponse(
-        appId = jsApiSignature.getAppId,
-        nonceStr = jsApiSignature.getNonceStr,
-        timestamp = Instant.ofEpochMilli(jsApiSignature.getTimestamp),
-        url = jsApiSignature.getUrl,
-        signature = jsApiSignature.getSignature
-      ).ok
+      Try(wxMpService.createJsapiSignature(url)).toEither match {
+        case Left(value) => value.error
+        case Right(value) => GetWxJsApiConfigResponse(
+          appId = value.getAppId,
+          nonceStr = value.getNonceStr,
+          timestamp = Instant.ofEpochMilli(value.getTimestamp),
+          url = value.getUrl,
+          signature = value.getSignature
+        ).ok
+      }
     }
   }
 
