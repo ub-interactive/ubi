@@ -50,19 +50,19 @@ class WechatModule extends AbstractModule {
     //    WxMpInMemoryConfigStorage
     val wxMpServiceImpl = new WxMpServiceImpl()
     wxMpServiceImpl.setWxMpConfigStorage(new WxMpDefaultConfigImpl {
-      appId = wxConfig.get[String]("appId")
-      secret = wxConfig.get[String]("appSecret")
+      appId = wxConfig.get[String]("app-id")
+      secret = wxConfig.get[String]("app-secret")
       token = wxConfig.get[String]("token")
-      aesKey = wxConfig.get[String]("aesKey")
+      aesKey = wxConfig.get[String]("aes-key")
     })
     wxMpServiceImpl
   }
 
   private def getWechatPayServiceImpl(wxConfig: Configuration): WxPayService = {
     val wxPayConfig = new WxPayConfig()
-    wxPayConfig.setAppId(wxConfig.get[String]("appId"))
-    wxPayConfig.setMchId(wxConfig.get[String]("mcId"))
-    wxPayConfig.setMchKey(wxConfig.get[String]("mcKey"))
+    wxPayConfig.setAppId(wxConfig.get[String]("app-id"))
+    wxPayConfig.setMchId(wxConfig.get[String]("m-id"))
+    wxPayConfig.setMchKey(wxConfig.get[String]("mc-key"))
     val wxPayServiceImpl = new WxPayServiceImpl
     wxPayServiceImpl.setConfig(wxPayConfig)
     wxPayServiceImpl
@@ -70,10 +70,10 @@ class WechatModule extends AbstractModule {
 
   private def getWechatOpenServiceImpl(wxConfig: Configuration): WxOpenService = {
     val wxOpenInMemoryConfigStorage = new WxOpenInMemoryConfigStorage
-    wxOpenInMemoryConfigStorage.setComponentAppId(wxConfig.get[String]("componentAppId"))
-    wxOpenInMemoryConfigStorage.setComponentAppSecret(wxConfig.get[String]("componentSecret"))
-    wxOpenInMemoryConfigStorage.setComponentToken(wxConfig.get[String]("componentToken"))
-    wxOpenInMemoryConfigStorage.setComponentAesKey(wxConfig.get[String]("componentAesKey"))
+    wxOpenInMemoryConfigStorage.setComponentAppId(wxConfig.get[String]("component-app-id"))
+    wxOpenInMemoryConfigStorage.setComponentAppSecret(wxConfig.get[String]("component-secret"))
+    wxOpenInMemoryConfigStorage.setComponentToken(wxConfig.get[String]("component-token"))
+    wxOpenInMemoryConfigStorage.setComponentAesKey(wxConfig.get[String]("component-aes-key"))
     val wxOpenServiceImpl = new WxOpenServiceImpl
     wxOpenServiceImpl.setWxOpenConfigStorage(wxOpenInMemoryConfigStorage)
     wxOpenServiceImpl
@@ -81,10 +81,10 @@ class WechatModule extends AbstractModule {
 
   private def getWechatMiniappServiceImp(wxConfig: Configuration): WxMaService = {
     val wxMaInMemoryConfig = new WxMaDefaultConfigImpl
-    wxMaInMemoryConfig.setAppid(wxConfig.get[String]("appId"))
-    wxMaInMemoryConfig.setSecret(wxConfig.get[String]("appSecret"))
+    wxMaInMemoryConfig.setAppid(wxConfig.get[String]("app-id"))
+    wxMaInMemoryConfig.setSecret(wxConfig.get[String]("app-secret"))
     //    wxMaInMemoryConfig.setToken(wxConfig.get[String]("token"))
-    //    wxMaInMemoryConfig.setAesKey(wxConfig.get[String]("aesKey"))
+    //    wxMaInMemoryConfig.setAesKey(wxConfig.get[String]("aes-key"))
     val wxMaService = new WxMaServiceImpl
     wxMaService.setWxMaConfig(wxMaInMemoryConfig)
     wxMaService
