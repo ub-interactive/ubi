@@ -36,7 +36,7 @@ class HomeController @Inject()(
     }
   }
 
-  def getSubject(page: PaginationParameter): Action[AnyContent] = {
+  def listSubject(page: PaginationParameter): Action[AnyContent] = {
     Action.async { implicit request =>
       val homeSubjects = HomeSubjectRepository.rows.sortBy(_.displayOrder.asc)
 

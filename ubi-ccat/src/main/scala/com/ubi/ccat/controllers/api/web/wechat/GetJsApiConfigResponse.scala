@@ -1,11 +1,11 @@
-package com.ubi.ccat.controllers.api.web
+package com.ubi.ccat.controllers.api.web.wechat
 
 import java.time.Instant
 
 import com.ubi.ccat.controllers.api.ApiResponseData
 import play.api.libs.json.{Json, OFormat}
 
-final case class GetWxJsApiConfigResponse(
+final case class GetJsApiConfigResponse(
   appId: String,
   nonceStr: String,
   timestamp: Instant,
@@ -13,8 +13,8 @@ final case class GetWxJsApiConfigResponse(
   signature: String
 ) extends ApiResponseData
 
-object GetWxJsApiConfigResponse {
-  implicit val format: OFormat[GetWxJsApiConfigResponse] = Json.format[GetWxJsApiConfigResponse]
+object GetJsApiConfigResponse {
+  implicit val format: OFormat[GetJsApiConfigResponse] = Json.format[GetJsApiConfigResponse]
 }
 
 
