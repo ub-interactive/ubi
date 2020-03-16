@@ -1,6 +1,8 @@
 GET         /                                 com.ubi.ccat.controllers.ApplicationController.index
 GET         /files/*path                      com.ubi.ccat.controllers.ApplicationController.file(path)
 
+GET         /api/web/get-wx-js-api                        com.ubi.ccat.controllers.api.web.WebApplicationController.getWxJsApiConfig(url: String)
+
 GET         /api/web/h                        com.ubi.ccat.controllers.api.web.home.HomeController.index
 GET         /api/web/h/s                      com.ubi.ccat.controllers.api.web.home.HomeController.getSubject(page: com.ubi.ccat.controllers.api.PaginationParameter)
 

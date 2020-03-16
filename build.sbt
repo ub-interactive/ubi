@@ -80,6 +80,40 @@ lazy val `ubi-ccat` = (project in file("ubi-ccat"))
     )
   )
 
+/* crm */
+lazy val `ubi-crm-api` = (project in file("ubi-crm-api"))
+  .settings(scalaVersion := "2.13.1",
+    maintainer := "83225506@qq.com",
+    sources in(Compile, doc) := Seq.empty,
+    publishArtifact in(Compile, packageDoc) := false,
+    organization := "com.ubi.crm",
+    name := "ubi-crm-api",
+    libraryDependencies ++= Seq(
+      lagomScaladslApi
+    )
+  )
+
+lazy val `ubi-crm-impl` = (project in file("ubi-crm-impl"))
+  .enablePlugins(LagomScala)
+  .settings(
+    scalaVersion := "2.13.1",
+    maintainer := "83225506@qq.com",
+    sources in(Compile, doc) := Seq.empty,
+    publishArtifact in(Compile, packageDoc) := false,
+    organization := "com.ubi.crm",
+    name := "ubi-crm-impl",
+    mappings in Universal ++= {
+      mapFiles((resourceDirectory in Compile).value, "conf")
+    },
+    libraryDependencies ++= Seq(
+      lagomScaladslKafkaBroker,
+      lagomScaladslPersistenceJdbc,
+      "mysql" % "mysql-connector-java" % "8.0.19",
+      "com.softwaremill.macwire" %% "macros" % "2.3.3" % "provided",
+      "com.github.etaty" %% "rediscala" % "1.9.0"
+    )
+  )
+  .dependsOn(`ubi-crm-api`)
 
 /* order */
 lazy val `ubi-order-api` = (project in file("ubi-order-api"))
@@ -111,7 +145,6 @@ lazy val `ubi-order-impl` = (project in file("ubi-order-impl"))
       lagomScaladslPersistenceJdbc,
       "mysql" % "mysql-connector-java" % "8.0.19",
       "com.softwaremill.macwire" %% "macros" % "2.3.3" % "provided",
-      "com.github.jnr" % "jnr-ffi" % "2.1.11",
       "com.github.etaty" %% "rediscala" % "1.9.0"
     )
   )
@@ -147,7 +180,6 @@ lazy val `ubi-finance-impl` = (project in file("ubi-finance-impl"))
       lagomScaladslPersistenceJdbc,
       "mysql" % "mysql-connector-java" % "8.0.19",
       "com.softwaremill.macwire" %% "macros" % "2.3.3" % "provided",
-      "com.github.jnr" % "jnr-ffi" % "2.1.11",
       "com.github.etaty" %% "rediscala" % "1.9.0"
     )
   )

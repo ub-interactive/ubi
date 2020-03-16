@@ -1,10 +1,10 @@
-package com.ubi.ccat.persistence.slick
+package com.ubi.ccat.tables
 
 import java.time.Instant
 import java.util.UUID
 
 import com.ubi.ccat.enums.CourseSaleTypeValue
-import com.ubi.ccat.persistence.slick.CourseEntity.Tags
+import CourseEntity.Tags
 import play.api.libs.json.Json
 import slick.jdbc.JdbcType
 

@@ -1,4 +1,4 @@
-package com.ubi.ccat.persistence.slick
+package com.ubi.ccat.tables
 
 object Tables extends Tables {
   val SCHEMA_NAME = "ubi_ccat"

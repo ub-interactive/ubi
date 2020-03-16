@@ -1,4 +1,4 @@
-package com.ubi.ccat.persistence.slick
+package com.ubi.ccat.tables
 
 import java.util.UUID
 

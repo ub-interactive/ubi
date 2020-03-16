@@ -5,7 +5,7 @@ import java.util.UUID
 
 import com.ubi.ccat.controllers.api.{ApiResponseData, PaginationResponseData}
 import com.ubi.ccat.enums.{CourseSaleTypeValue, SubjectDisplayStyleValue}
-import com.ubi.ccat.persistence.slick.CourseEntity.Tags
+import com.ubi.ccat.tables.CourseEntity.Tags
 import play.api.libs.json.{Json, OFormat, OWrites}
 
 final case class GetSubjectResponse(

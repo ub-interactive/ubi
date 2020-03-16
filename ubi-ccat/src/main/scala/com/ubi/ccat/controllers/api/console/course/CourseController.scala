@@ -5,9 +5,9 @@ import java.util.UUID
 import akka.Done
 import com.ubi.ccat.controllers.api.ApiRequest
 import com.ubi.ccat.controllers.api.web.WebApiController
-import com.ubi.ccat.persistence.slick.CourseEntity
-import com.ubi.ccat.persistence.slick.Tables._
-import com.ubi.ccat.persistence.slick.Tables.profile.api._
+import com.ubi.ccat.tables
+import com.ubi.ccat.tables.Tables._
+import com.ubi.ccat.tables.Tables.profile.api._
 import javax.inject.Inject
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.libs.json.JsValue
@@ -25,7 +25,7 @@ class CourseController @Inject()(
       request.body.validate[ApiRequest[CreateCourseRequest]].process { createCourseRequest =>
         val CreateCourseRequest(title, subtitle, thumbnailUrl, coverUrl, price, promotionPrice, saleType, tags, courseIntro, courseMenu, courseInfo, flashSaleStartAt, flashSaleEndAt, saleStock) = createCourseRequest
         val courseId = UUID.randomUUID()
-        db.run(CourseRepository.rows += CourseEntity(
+        db.run(CourseRepository.rows += tables.CourseEntity(
           courseId = courseId,
           title = title,
           subtitle = subtitle,
@@ -66,7 +66,7 @@ class CourseController @Inject()(
     Action.async(parse.json) { implicit request =>
       request.body.validate[ApiRequest[UpdateCourseRequest]].process { updateCourseRequest =>
         val UpdateCourseRequest(title, subtitle, thumbnailUrl, coverUrl, price, promotionPrice, saleType, tags, courseIntro, courseMenu, courseInfo, flashSaleStartAt, flashSaleEndAt, saleStock) = updateCourseRequest
-        db.run(CourseRepository.rows.filter(_.courseId === courseId).update(CourseEntity(
+        db.run(CourseRepository.rows.filter(_.courseId === courseId).update(tables.CourseEntity(
           courseId = courseId,
           title = title,
           subtitle = subtitle,
@@ -132,7 +132,9 @@ class CourseController @Inject()(
     }
   }
 
-  def deleteCourse(courseId: UUID): Action[AnyContent] = Action.async { implicit request =>
-    db.run(CourseRepository.rows.filter(_.courseId === courseId).delete).map(_ => Done).ok
+  def deleteCourse(courseId: UUID): Action[AnyContent] = {
+    Action.async { implicit request =>
+      db.run(CourseRepository.rows.filter(_.courseId === courseId).delete).map(_ => Done).ok
+    }
   }
 }

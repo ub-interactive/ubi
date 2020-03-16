@@ -1,6 +1,5 @@
 package com.ubi.ccat.enums
 
-import com.ubi.ccat.EnumAttributeValue
 import play.api.libs.json.{Format, JsResult, JsString, JsValue}
 import play.api.mvc.QueryStringBindable.Parsing
 import slick.jdbc.JdbcType

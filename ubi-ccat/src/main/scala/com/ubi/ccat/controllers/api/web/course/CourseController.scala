@@ -3,12 +3,11 @@ package com.ubi.ccat.controllers.api.web.course
 import java.util.UUID
 
 import com.ubi.ccat.controllers.api.web.WebApiController
-import com.ubi.ccat.persistence.slick.Tables._
-import com.ubi.ccat.persistence.slick.Tables.profile.api._
 import javax.inject.Inject
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.mvc.{Action, AnyContent}
-
+import com.ubi.ccat.tables.Tables._
+import com.ubi.ccat.tables.Tables.profile.api._
 import scala.concurrent.ExecutionContext
 
 class CourseController @Inject()(
