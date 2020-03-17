@@ -77,7 +77,9 @@ lazy val `ubi-ccat` = (project in file("ubi-ccat"))
       "com.github.binarywang" % "weixin-java-mp" % weixinJavaVersion,
       "com.github.binarywang" % "weixin-java-pay" % weixinJavaVersion,
       "com.github.binarywang" % "weixin-java-open" % weixinJavaVersion,
-      "com.github.binarywang" % "weixin-java-miniapp" % weixinJavaVersion
+      "com.github.binarywang" % "weixin-java-miniapp" % weixinJavaVersion,
+
+      "com.aliyun" % "aliyun-java-sdk-core" % "4.1.0"
     )
   )
   .dependsOn(`ubi-crm-api`)
