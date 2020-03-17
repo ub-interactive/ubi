@@ -35,6 +35,22 @@ class WechatController @Inject()(
     }
   }
 
+  def test() = {
+    Action.async { implicit request =>
+      crmService.userCreate.invoke(CreateUserRequest(
+        mobile = "18600094776",
+        openId = "value.getOpenId",
+        nickname = "value.getNickname",
+        gender = UserGender.Secret,
+        language = "value.getLanguage",
+        city = "value.getCity",
+        province = "value.getProvince",
+        country = "value.getCity",
+        avatarUrl = "value.getHeadImgUrl"
+      )).ok
+    }
+  }
+
   def getUserInfo(code: String): Action[AnyContent] = {
     Action.async { implicit request =>
       Try {
@@ -46,7 +62,7 @@ class WechatController @Inject()(
           mobile = "18600094776",
           openId = value.getOpenId,
           nickname = value.getNickname,
-          gender = value.getSex match {
+          gender = value.getSex.intValue() match {
             case 0 => UserGender.Secret
             case 1 => UserGender.Male
             case 2 => UserGender.Female

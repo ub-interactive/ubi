@@ -6,7 +6,7 @@ import akka.persistence.typed.PersistenceId
 import akka.persistence.typed.scaladsl.{Effect, EventSourcedBehavior, ReplyEffect, RetentionCriteria}
 import com.lightbend.lagom.scaladsl.persistence.{AggregateEvent, AggregateEventTag, AkkaTaggerAdapter}
 import com.ubi.crm.api.enums._
-import com.ubi.crm.impl.user.UserAggregate.{GetUserState, UserCommand, UserEvent}
+import com.ubi.crm.impl.user.UserAggregate._
 import play.api.libs.json._
 
 object UserAggregate {
@@ -132,6 +132,7 @@ final case class UserState(
   def onCommand(cmd: UserCommand): ReplyEffect[UserEvent, Option[UserState]] = {
     cmd match {
       case GetUserState(replyTo) => Effect.reply(replyTo)(this)
+      case CreateUser(openId, nickname, gender, language, city, province, country, avatarUrl, replyTo) => Effect.reply(replyTo)(Rejected("user.exists"))
       case cmd => throw new IllegalStateException(s"invalid command [${cmd.getClass.getTypeName}]")
     }
   }

@@ -11,6 +11,7 @@ GET         /api/web/search                          com.ubi.ccat.controllers.ap
 GET         /api/web/wechat/get-auth-url             com.ubi.ccat.controllers.api.web.wechat.WechatController.getAuthorizationUrl(redirect_url: String, scope: Option[String], state: Option[String])
 GET         /api/web/wechat/get-js-api-config        com.ubi.ccat.controllers.api.web.wechat.WechatController.getWxJsApiConfig(url: String)
 GET         /api/web/wechat/get-user-info            com.ubi.ccat.controllers.api.web.wechat.WechatController.getUserInfo(code: String)
+GET         /api/web/wechat/test                     com.ubi.ccat.controllers.api.web.wechat.WechatController.test()
 
 GET         /api/console/course/list                 com.ubi.ccat.controllers.api.console.course.CourseController.listCourse
 POST        /api/console/course/update               com.ubi.ccat.controllers.api.console.course.CourseController.updateCourse(course_id : java.util.UUID)

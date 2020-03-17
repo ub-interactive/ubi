@@ -140,7 +140,7 @@ trait ApiController extends InjectedController with HasDatabaseConfigProvider[Jd
     }
   }
 
-  implicit class ApiDoneResponseHelper(data: Done.type) {
+  implicit class ApiDoneResponseHelper(data: Done) {
     def ok(
       implicit rh: RequestHeader
     ): Result = {
@@ -166,7 +166,7 @@ trait ApiController extends InjectedController with HasDatabaseConfigProvider[Jd
     }
   }
 
-  implicit class AsyncApiDoneResponseHelper(data: Future[Done.type]) {
+  implicit class AsyncApiDoneResponseHelper(data: Future[Done]) {
     def ok(
       implicit rh: RequestHeader
     ): Future[Result] = {
