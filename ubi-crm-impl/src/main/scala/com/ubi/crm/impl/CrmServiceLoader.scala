@@ -10,7 +10,7 @@ import com.lightbend.lagom.scaladsl.playjson.JsonSerializerRegistry
 import com.lightbend.lagom.scaladsl.server._
 import com.softwaremill.macwire._
 import com.ubi.crm.api.CrmService
-import com.ubi.crm.impl.user.{CrmAggregate, CrmEntitySerializerRegistry, CrmServiceImpl}
+import com.ubi.crm.impl.user.UserAggregate
 import play.api.db.HikariCPComponents
 import play.api.libs.ws.ahc.AhcWSComponents
 
@@ -36,11 +36,11 @@ abstract class CrmServiceApplication(context: LagomApplicationContext)
     with LagomKafkaComponents
     with AhcWSComponents {
 
-  override lazy val jsonSerializerRegistry: JsonSerializerRegistry = CrmEntitySerializerRegistry
+  override lazy val jsonSerializerRegistry: JsonSerializerRegistry = EntitySerializerRegistry
 
   override lazy val lagomServer: LagomServer = serverFor[CrmService](wire[CrmServiceImpl])
 
-  clusterSharding.init(Entity(CrmAggregate.typeKey) { entityContext => CrmAggregate(entityContext) })
+  clusterSharding.init(Entity(UserAggregate.typeKey) { entityContext => UserAggregate(entityContext) })
 
   //  readSide.register(wire[CrmEventProcessor])
 }

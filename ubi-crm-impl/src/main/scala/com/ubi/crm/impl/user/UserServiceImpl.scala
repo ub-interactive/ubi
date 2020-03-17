@@ -27,7 +27,7 @@ trait UserServiceImpl extends UserService with Logging {
     clusterSharding.entityRefFor(UserAggregate.typeKey, mobile)
   }
 
-  implicit private val askTimeout: Timeout = Timeout.durationToTimeout(5 seconds)
+  implicit private val askTimeout: Timeout = Timeout.durationToTimeout(5.seconds)
 
   private implicit val _logger: Logger = logger
 
