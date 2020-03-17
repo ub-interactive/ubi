@@ -37,7 +37,7 @@ class ShortMessageService @Inject()(
     s"MOBILE_VERIFICATION_$mobile"
   }
 
-  def sendMobileVerificationMessage(mobile: String): Future[Done.type] = {
+  def sendMobileVerificationCode(mobile: String): Future[Done.type] = {
     val key = mobileVerificationKey(mobile)
     for {
       codeOpt <- redisClient.get[String](key)
@@ -59,7 +59,7 @@ class ShortMessageService @Inject()(
     } yield Done
   }
 
-  def verifyMobile(
+  def verifyMobileCode(
     mobile: String,
     code: String
   ): Future[Boolean] = {
