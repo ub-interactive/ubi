@@ -2,14 +2,15 @@ package com.ubi.ccat.controllers.api.web.wechat
 
 import java.time.Instant
 
+import com.ubi.ccat.controllers.api.ApiRequest
 import com.ubi.ccat.controllers.api.web.WebApiController
 import com.ubi.crm.api.CrmService
 import com.ubi.crm.api.enums.UserGender
-import com.ubi.crm.api.user.CreateUserRequest
 import javax.inject.Inject
 import me.chanjar.weixin.mp.api.WxMpService
 import play.api.Environment
 import play.api.db.slick.DatabaseConfigProvider
+import play.api.libs.json.JsValue
 import play.api.mvc.{Action, AnyContent}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -35,44 +36,14 @@ class WechatController @Inject()(
     }
   }
 
-  def test() = {
-    Action.async { implicit request =>
-      crmService.userCreate.invoke(CreateUserRequest(
-        mobile = "18600094776",
-        openId = "value.getOpenId",
-        nickname = "value.getNickname",
-        gender = UserGender.Secret,
-        language = "value.getLanguage",
-        city = "value.getCity",
-        province = "value.getProvince",
-        country = "value.getCity",
-        avatarUrl = "value.getHeadImgUrl"
-      )).ok
-    }
-  }
-
   def getUserInfo(code: String): Action[AnyContent] = {
-    Action.async { implicit request =>
+    Action { implicit request =>
       Try {
         val accessToken = wxMpService.oauth2getAccessToken(code)
         wxMpService.oauth2getUserInfo(accessToken, "zh_CN")
       } match {
-        case Failure(exception) => Future.successful(exception.error)
-        case Success(value) => crmService.userCreate.invoke(CreateUserRequest(
-          mobile = "18600094776",
-          openId = value.getOpenId,
-          nickname = value.getNickname,
-          gender = value.getSex.intValue() match {
-            case 0 => UserGender.Secret
-            case 1 => UserGender.Male
-            case 2 => UserGender.Female
-          },
-          language = value.getLanguage,
-          city = value.getCity,
-          province = value.getProvince,
-          country = value.getCity,
-          avatarUrl = value.getHeadImgUrl
-        )).map(_ => GetUserInfoResponse(
+        case Failure(exception) => exception.error
+        case Success(value) => GetUserInfoResponse(
           openId = value.getOpenId,
           nickname = value.getNickname,
           sex = value.getSex,
@@ -81,7 +52,35 @@ class WechatController @Inject()(
           province = value.getProvince,
           country = value.getCountry,
           headImgUrl = value.getHeadImgUrl
-        )).ok
+        ).ok
+      }
+    }
+  }
+
+  def createUser(): Action[JsValue] = {
+    Action.async(parse.json) { implicit request =>
+      request.body.validate[ApiRequest[CreateUserRequest]].withData { createUserRequest =>
+        val CreateUserRequest(openId, mobile) = createUserRequest
+        Try {
+          wxMpService.getUserService.userInfo(openId)
+        } match {
+          case Failure(exception) => Future.successful(exception.error)
+          case Success(value) => crmService.userCreate.invoke(com.ubi.crm.api.user.CreateUserRequest(
+            mobile = mobile,
+            openId = value.getOpenId,
+            nickname = value.getNickname,
+            gender = value.getSex.intValue() match {
+              case 0 => UserGender.Secret
+              case 1 => UserGender.Male
+              case 2 => UserGender.Female
+            },
+            language = value.getLanguage,
+            city = value.getCity,
+            province = value.getProvince,
+            country = value.getCity,
+            avatarUrl = value.getHeadImgUrl
+          )).ok
+        }
       }
     }
   }
@@ -100,9 +99,5 @@ class WechatController @Inject()(
       }
     }
   }
-
-  //  def getWx = Action{ implicit request =>
-  //    wxMpService.getUserService.userInfo()
-  //  }
 
 }

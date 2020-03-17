@@ -6,6 +6,7 @@ import akka.Done
 import com.ubi.ccat.controllers.api.ApiRequest
 import com.ubi.ccat.controllers.api.web.WebApiController
 import com.ubi.ccat.tables
+import com.ubi.ccat.tables.CourseEntity
 import com.ubi.ccat.tables.Tables._
 import com.ubi.ccat.tables.Tables.profile.api._
 import javax.inject.Inject
@@ -22,7 +23,7 @@ class CourseController @Inject()(
 
   def createCourse: Action[JsValue] = {
     Action.async(parse.json) { implicit request =>
-      request.body.validate[ApiRequest[CreateCourseRequest]].process { createCourseRequest =>
+      request.body.validate[ApiRequest[CreateCourseRequest]].withData { createCourseRequest =>
         val CreateCourseRequest(title, subtitle, thumbnailUrl, coverUrl, price, promotionPrice, saleType, tags, courseIntro, courseMenu, courseInfo, flashSaleStartAt, flashSaleEndAt, saleStock) = createCourseRequest
         val courseId = UUID.randomUUID()
         db.run(CourseRepository.rows += tables.CourseEntity(
@@ -64,9 +65,9 @@ class CourseController @Inject()(
 
   def updateCourse(courseId: UUID): Action[JsValue] = {
     Action.async(parse.json) { implicit request =>
-      request.body.validate[ApiRequest[UpdateCourseRequest]].process { updateCourseRequest =>
+      request.body.validate[ApiRequest[UpdateCourseRequest]].withData { updateCourseRequest =>
         val UpdateCourseRequest(title, subtitle, thumbnailUrl, coverUrl, price, promotionPrice, saleType, tags, courseIntro, courseMenu, courseInfo, flashSaleStartAt, flashSaleEndAt, saleStock) = updateCourseRequest
-        db.run(CourseRepository.rows.filter(_.courseId === courseId).update(tables.CourseEntity(
+        db.run(CourseRepository.rows.filter(_.courseId === courseId).update(CourseEntity(
           courseId = courseId,
           title = title,
           subtitle = subtitle,
