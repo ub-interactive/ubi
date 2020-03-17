@@ -1,9 +1,9 @@
-package com.ubi.ccat.controllers.api.web.wechat
+package com.ubi.ccat.controllers.api.web.user
 
 import com.ubi.ccat.controllers.api.ApiResponseData
 import play.api.libs.json.{Json, OFormat}
 
-final case class GetUserInfoResponse(
+final case class GetWechatUserInfoResponse(
   openId: String,
   nickname: String,
   sex: Int,
@@ -14,6 +14,6 @@ final case class GetUserInfoResponse(
   headImgUrl: String
 ) extends ApiResponseData
 
-object GetUserInfoResponse {
-  implicit val format: OFormat[GetUserInfoResponse] = Json.format[GetUserInfoResponse]
+object GetWechatUserInfoResponse {
+  implicit val format: OFormat[GetWechatUserInfoResponse] = Json.format[GetWechatUserInfoResponse]
 }

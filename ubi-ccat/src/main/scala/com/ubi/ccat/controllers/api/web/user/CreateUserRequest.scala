@@ -1,4 +1,4 @@
-package com.ubi.ccat.controllers.api.web.wechat
+package com.ubi.ccat.controllers.api.web.user
 
 import com.ubi.ccat.controllers.api.ApiRequestData
 import play.api.libs.json.{Json, OFormat}
