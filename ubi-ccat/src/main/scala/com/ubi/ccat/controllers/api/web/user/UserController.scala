@@ -2,8 +2,10 @@ package com.ubi.ccat.controllers.api.web.user
 
 import java.time.Instant
 
+import akka.Done
 import com.ubi.ccat.controllers.api.ApiRequest
 import com.ubi.ccat.controllers.api.web.WebApiController
+import com.ubi.ccat.services.ShortMessageService
 import com.ubi.crm.api.CrmService
 import com.ubi.crm.api.enums.UserGender
 import javax.inject.Inject
@@ -20,6 +22,7 @@ class UserController @Inject()(
   environment: Environment,
   crmService: CrmService,
   wxMpService: WxMpService,
+  shortMessageService: ShortMessageService,
   val dbConfigProvider: DatabaseConfigProvider
 )
   (implicit val ec: ExecutionContext) extends WebApiController {
@@ -69,6 +72,24 @@ class UserController @Inject()(
           signature = value.getSignature
         ).ok
       }
+    }
+  }
+
+  def sendMobileVerificationCode(mobile: String): Action[AnyContent] = {
+    Action.async { implicit request =>
+      shortMessageService.sendMobileVerificationCode(mobile).ok
+    }
+  }
+
+  def verifyMobileCode(
+    mobile: String,
+    code: String
+  ): Action[AnyContent] = {
+    Action.async { implicit request =>
+      shortMessageService.verifyMobileCode(mobile, code).map {
+        case true => Done
+        case false => throw new IllegalStateException("failed.verify.code")
+      }.ok
     }
   }
 

@@ -1,17 +1,19 @@
-GET         /                                             com.ubi.ccat.controllers.ApplicationController.index
-GET         /files/*path                                  com.ubi.ccat.controllers.ApplicationController.file(path)
+GET         /                                                  com.ubi.ccat.controllers.ApplicationController.index
+GET         /files/*path                                       com.ubi.ccat.controllers.ApplicationController.file(path)
 
-GET         /api/web/h                                    com.ubi.ccat.controllers.api.web.home.HomeController.index
-GET         /api/web/h/s                                  com.ubi.ccat.controllers.api.web.home.HomeController.listSubject(page: com.ubi.ccat.controllers.api.PaginationParameter)
-GET         /api/web/s/:subject_id                        com.ubi.ccat.controllers.api.web.subject.SubjectController.getSubject(subject_id: java.util.UUID, page: com.ubi.ccat.controllers.api.PaginationParameter)
-GET         /api/web/c/:course_id                         com.ubi.ccat.controllers.api.web.course.CourseController.getCourse(course_id: java.util.UUID)
-GET         /api/web/search                               com.ubi.ccat.controllers.api.web.search.SearchController.search(keyword: String, page: com.ubi.ccat.controllers.api.PaginationParameter)
+GET         /api/web/h                                         com.ubi.ccat.controllers.api.web.home.HomeController.index
+GET         /api/web/h/s                                       com.ubi.ccat.controllers.api.web.home.HomeController.listSubject(page: com.ubi.ccat.controllers.api.PaginationParameter)
+GET         /api/web/s/:subject_id                             com.ubi.ccat.controllers.api.web.subject.SubjectController.getSubject(subject_id: java.util.UUID, page: com.ubi.ccat.controllers.api.PaginationParameter)
+GET         /api/web/c/:course_id                              com.ubi.ccat.controllers.api.web.course.CourseController.getCourse(course_id: java.util.UUID)
+GET         /api/web/search                                    com.ubi.ccat.controllers.api.web.search.SearchController.search(keyword: String, page: com.ubi.ccat.controllers.api.PaginationParameter)
 
-GET         /api/web/user/get-wechat-auth-url             com.ubi.ccat.controllers.api.web.user.UserController.getWechatAuthorizationUrl(redirect_url: String, scope: Option[String], state: Option[String])
-GET         /api/web/user/get-wechat-user-info            com.ubi.ccat.controllers.api.web.user.UserController.getWechatUserInfo(code: String)
-GET         /api/web/user/get-wechat-js-api-config        com.ubi.ccat.controllers.api.web.user.UserController.getWechatJsApiConfig(url: String)
-POST        /api/web/user/create-user                     com.ubi.ccat.controllers.api.web.user.UserController.createUser()
+GET         /api/web/user/get-wechat-auth-url                  com.ubi.ccat.controllers.api.web.user.UserController.getWechatAuthorizationUrl(redirect_url: String, scope: Option[String], state: Option[String])
+GET         /api/web/user/get-wechat-user-info                 com.ubi.ccat.controllers.api.web.user.UserController.getWechatUserInfo(code: String)
+GET         /api/web/user/get-wechat-js-api-config             com.ubi.ccat.controllers.api.web.user.UserController.getWechatJsApiConfig(url: String)
+POST        /api/web/user/create-user                          com.ubi.ccat.controllers.api.web.user.UserController.createUser()
+POST        /api/web/user/send-mobile-verification-code        com.ubi.ccat.controllers.api.web.user.UserController.sendMobileVerificationCode(mobile: String)
+POST        /api/web/user/verify-mobile-code                   com.ubi.ccat.controllers.api.web.user.UserController.verifyMobileCode(mobile: String, code: String)
 
-GET         /api/console/course/list                      com.ubi.ccat.controllers.api.console.course.CourseController.listCourse
-POST        /api/console/course/update                    com.ubi.ccat.controllers.api.console.course.CourseController.updateCourse(course_id : java.util.UUID)
-POST        /api/console/course/create                    com.ubi.ccat.controllers.api.console.course.CourseController.createCourse
+GET         /api/console/course/list                           com.ubi.ccat.controllers.api.console.course.CourseController.listCourse
+POST        /api/console/course/update                         com.ubi.ccat.controllers.api.console.course.CourseController.updateCourse(course_id : java.util.UUID)
+POST        /api/console/course/create                         com.ubi.ccat.controllers.api.console.course.CourseController.createCourse
