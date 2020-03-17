@@ -9,37 +9,38 @@ import com.lightbend.lagom.scaladsl.persistence.slick.SlickPersistenceComponents
 import com.lightbend.lagom.scaladsl.playjson.JsonSerializerRegistry
 import com.lightbend.lagom.scaladsl.server._
 import com.softwaremill.macwire._
-import com.ubi.crm.api.UserService
+import com.ubi.crm.api.CrmService
+import com.ubi.crm.impl.user.{CrmAggregate, CrmEntitySerializerRegistry, CrmServiceImpl}
 import play.api.db.HikariCPComponents
 import play.api.libs.ws.ahc.AhcWSComponents
 
-class UserServiceLoader extends LagomApplicationLoader {
+class CrmServiceLoader extends LagomApplicationLoader {
 
   override def load(context: LagomApplicationContext): LagomApplication = {
-    new UserServiceApplication(context) with ConfigurationServiceLocatorComponents
+    new CrmServiceApplication(context) with ConfigurationServiceLocatorComponents
   }
 
   override def loadDevMode(context: LagomApplicationContext): LagomApplication = {
-    new UserServiceApplication(context) with LagomDevModeComponents
+    new CrmServiceApplication(context) with LagomDevModeComponents
   }
 
   override def describeService: Some[Descriptor] = {
-    Some(readDescriptor[UserService])
+    Some(readDescriptor[CrmService])
   }
 }
 
-abstract class UserServiceApplication(context: LagomApplicationContext)
+abstract class CrmServiceApplication(context: LagomApplicationContext)
   extends LagomApplication(context)
     with SlickPersistenceComponents
     with HikariCPComponents
     with LagomKafkaComponents
     with AhcWSComponents {
 
-  override lazy val jsonSerializerRegistry: JsonSerializerRegistry = EntitySerializerRegistry
+  override lazy val jsonSerializerRegistry: JsonSerializerRegistry = CrmEntitySerializerRegistry
 
-  override lazy val lagomServer: LagomServer = serverFor[UserService](wire[UserServiceImpl])
+  override lazy val lagomServer: LagomServer = serverFor[CrmService](wire[CrmServiceImpl])
 
-  clusterSharding.init(Entity(UserAggregate.typeKey) { entityContext => UserAggregate(entityContext) })
+  clusterSharding.init(Entity(CrmAggregate.typeKey) { entityContext => CrmAggregate(entityContext) })
 
-  //  readSide.register(wire[UserEventProcessor])
+  //  readSide.register(wire[CrmEventProcessor])
 }

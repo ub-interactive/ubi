@@ -1,9 +1,10 @@
-package com.ubi.crm.api
+package com.ubi.crm.api.user
 
 import com.ubi.crm.api.enums.UserGenderValue
 import play.api.libs.json.{Json, OFormat}
 
 final case class CreateUserRequest(
+  mobile: String,
   openId: String,
   nickname: String,
   gender: UserGenderValue,
