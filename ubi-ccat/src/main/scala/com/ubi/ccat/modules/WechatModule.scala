@@ -83,8 +83,8 @@ class WechatModule extends AbstractModule {
     val wxMaInMemoryConfig = new WxMaDefaultConfigImpl
     wxMaInMemoryConfig.setAppid(wxConfig.get[String]("app-id"))
     wxMaInMemoryConfig.setSecret(wxConfig.get[String]("app-secret"))
-    //    wxMaInMemoryConfig.setToken(wxConfig.get[String]("token"))
-    //    wxMaInMemoryConfig.setAesKey(wxConfig.get[String]("aes-key"))
+//    wxMaInMemoryConfig.setToken(wxConfig.get[String]("token"))
+//    wxMaInMemoryConfig.setAesKey(wxConfig.get[String]("aes-key"))
     val wxMaService = new WxMaServiceImpl
     wxMaService.setWxMaConfig(wxMaInMemoryConfig)
     wxMaService

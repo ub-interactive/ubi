@@ -23,10 +23,8 @@ class ShortMessageService @Inject()(aliCloudServiceConfig: AliCloudServiceConfig
     request.setAction("SendSms")
     request.putQueryParameter("RegionId", aliCloudServiceConfig.regionId)
     request.putQueryParameter("SignName", aliCloudServiceConfig.signName)
-
     Try(Json.parse(client.getCommonResponse(process(request)).getData).validate[SmsMessageResponse].get)
   }
-
 
   def sendSms(message: ShortMessageService.SmsMessage): Try[String] = {
     withRequest { request =>

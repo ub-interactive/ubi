@@ -1,19 +1,25 @@
 package com.ubi.ccat.modules
 
+import akka.actor.ActorSystem
 import com.google.inject
+import com.google.inject.{AbstractModule, Provides}
+import com.ubi.ccat.configs.RedisConfig
 import com.ubi.ccat.providers.CrmServiceProvider
 import com.ubi.crm.api.CrmService
-import play.api.inject.Binding
-import play.api.{Configuration, Environment}
+import play.api.Configuration
+import redis.RedisClient
 
-class ServiceModule extends play.api.inject.Module {
+class ServiceModule extends AbstractModule {
+  override def configure(): Unit = {
+    bind(classOf[CrmService]).toProvider(classOf[CrmServiceProvider]).in(classOf[inject.Singleton])
+  }
 
-  override def bindings(
-    environment: Environment,
+  @Provides
+  def provideRedis(
+    actorSystem: ActorSystem,
     configuration: Configuration
-  ): Seq[Binding[_]] = {
-    Seq(
-      bind[CrmService].toProvider[CrmServiceProvider].in(classOf[inject.Singleton]),
-    )
+  ): RedisClient = {
+    val redisConfig = configuration.get[RedisConfig]("redis.instances.default")
+    RedisClient(host = redisConfig.host, password = Some(redisConfig.password), port = redisConfig.port, db = Some(redisConfig.database))(_system = actorSystem)
   }
 }
