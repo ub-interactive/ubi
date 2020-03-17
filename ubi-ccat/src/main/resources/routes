@@ -1,13 +1,12 @@
 GET         /                                        com.ubi.ccat.controllers.ApplicationController.index
 GET         /files/*path                             com.ubi.ccat.controllers.ApplicationController.file(path)
 
-
-
 GET         /api/web/h                               com.ubi.ccat.controllers.api.web.home.HomeController.index
 GET         /api/web/h/s                             com.ubi.ccat.controllers.api.web.home.HomeController.listSubject(page: com.ubi.ccat.controllers.api.PaginationParameter)
 GET         /api/web/s/:subject_id                   com.ubi.ccat.controllers.api.web.subject.SubjectController.getSubject(subject_id: java.util.UUID, page: com.ubi.ccat.controllers.api.PaginationParameter)
 GET         /api/web/c/:course_id                    com.ubi.ccat.controllers.api.web.course.CourseController.getCourse(course_id: java.util.UUID)
 GET         /api/web/search                          com.ubi.ccat.controllers.api.web.search.SearchController.search(keyword: String, page: com.ubi.ccat.controllers.api.PaginationParameter)
+
 GET         /api/web/wechat/get-auth-url             com.ubi.ccat.controllers.api.web.wechat.WechatController.getAuthorizationUrl(redirect_url: String, scope: Option[String], state: Option[String])
 GET         /api/web/wechat/get-js-api-config        com.ubi.ccat.controllers.api.web.wechat.WechatController.getWxJsApiConfig(url: String)
 GET         /api/web/wechat/get-user-info            com.ubi.ccat.controllers.api.web.wechat.WechatController.getUserInfo(code: String)
