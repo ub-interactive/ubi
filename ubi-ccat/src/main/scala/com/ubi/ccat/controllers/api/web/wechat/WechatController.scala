@@ -3,17 +3,21 @@ package com.ubi.ccat.controllers.api.web.wechat
 import java.time.Instant
 
 import com.ubi.ccat.controllers.api.web.WebApiController
+import com.ubi.crm.api.CrmService
+import com.ubi.crm.api.enums.UserGender
+import com.ubi.crm.api.user.CreateUserRequest
 import javax.inject.Inject
 import me.chanjar.weixin.mp.api.WxMpService
 import play.api.Environment
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.mvc.{Action, AnyContent}
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
 
 class WechatController @Inject()(
   environment: Environment,
+  crmService: CrmService,
   wxMpService: WxMpService,
   val dbConfigProvider: DatabaseConfigProvider
 )
@@ -32,13 +36,27 @@ class WechatController @Inject()(
   }
 
   def getUserInfo(code: String): Action[AnyContent] = {
-    Action { implicit request =>
+    Action.async { implicit request =>
       Try {
         val accessToken = wxMpService.oauth2getAccessToken(code)
         wxMpService.oauth2getUserInfo(accessToken, "zh_CN")
       } match {
-        case Failure(exception) => exception.error
-        case Success(value) => GetUserInfoResponse(
+        case Failure(exception) => Future.successful(exception.error)
+        case Success(value) => crmService.userCreate.invoke(CreateUserRequest(
+          mobile = "18600094776",
+          openId = value.getOpenId,
+          nickname = value.getNickname,
+          gender = value.getSex match {
+            case 0 => UserGender.Secret
+            case 1 => UserGender.Male
+            case 2 => UserGender.Female
+          },
+          language = value.getLanguage,
+          city = value.getCity,
+          province = value.getProvince,
+          country = value.getCity,
+          avatarUrl = value.getHeadImgUrl
+        )).map(_ => GetUserInfoResponse(
           openId = value.getOpenId,
           nickname = value.getNickname,
           sex = value.getSex,
@@ -47,7 +65,7 @@ class WechatController @Inject()(
           province = value.getProvince,
           country = value.getCountry,
           headImgUrl = value.getHeadImgUrl
-        ).ok
+        )).ok
       }
     }
   }

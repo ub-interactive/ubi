@@ -71,7 +71,7 @@ object UserAggregate {
   def onInitialCommand(cmd: UserCommand): ReplyEffect[UserEvent, Option[UserState]] = {
     cmd match {
       case CreateUser(openId, nickname, gender, language, city, province, country, avatarUrl, replyTo) =>
-        Effect.persist(UserCreated(openId, nickname, gender, language, city, province, country, avatarUrl)).thenReply(replyTo)(state => Accepted)
+        Effect.persist(UserCreated(openId, nickname, gender, language, city, province, country, avatarUrl)).thenReply(replyTo)(_ => Accepted)
       case cmd => throw new IllegalStateException(s"invalid command [${cmd.getClass.getTypeName}] sent to state [None]")
     }
   }

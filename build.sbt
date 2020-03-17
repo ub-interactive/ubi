@@ -44,6 +44,7 @@ lazy val `ubi-ccat` = (project in file("ubi-ccat"))
     organization := "com.ubi.api",
     name := "ubi-ccat",
     libraryDependencies ++= Seq(
+      lagomScaladslClient,
       guice,
       ws,
       filters,
@@ -51,8 +52,8 @@ lazy val `ubi-ccat` = (project in file("ubi-ccat"))
       "ch.qos.logback" % "logback-classic" % "1.2.3",
 
       /** database */
-//      jdbc,
-//      evolutions,
+      //      jdbc,
+      //      evolutions,
       "mysql" % "mysql-connector-java" % "8.0.19",
       "com.typesafe.slick" %% "slick" % slickVersion,
       "com.typesafe.slick" %% "slick-hikaricp" % slickVersion,
@@ -72,13 +73,14 @@ lazy val `ubi-ccat` = (project in file("ubi-ccat"))
       "com.mohiva" %% "play-silhouette-cas" % playSilhouetteVersion,
       "com.mohiva" %% "play-silhouette-totp" % playSilhouetteVersion,
 
-      /** weixin api*/
+      /** weixin api */
       "com.github.binarywang" % "weixin-java-mp" % weixinJavaVersion,
       "com.github.binarywang" % "weixin-java-pay" % weixinJavaVersion,
       "com.github.binarywang" % "weixin-java-open" % weixinJavaVersion,
       "com.github.binarywang" % "weixin-java-miniapp" % weixinJavaVersion
     )
   )
+  .dependsOn(`ubi-crm-api`)
 
 /* crm */
 lazy val `ubi-crm-api` = (project in file("ubi-crm-api"))
