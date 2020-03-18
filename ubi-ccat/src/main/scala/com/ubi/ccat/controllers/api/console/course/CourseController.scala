@@ -5,10 +5,10 @@ import java.util.UUID
 import akka.Done
 import com.ubi.ccat.controllers.api.ApiRequest
 import com.ubi.ccat.controllers.api.web.WebApiController
-import com.ubi.ccat.tables
-import com.ubi.ccat.tables.CourseEntity
-import com.ubi.ccat.tables.Tables._
-import com.ubi.ccat.tables.Tables.profile.api._
+import com.ubi.ccat.entities
+import com.ubi.ccat.entities.CourseEntity
+import com.ubi.ccat.entities.Tables._
+import com.ubi.ccat.entities.Tables.profile.api._
 import javax.inject.Inject
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.libs.json.JsValue
@@ -26,7 +26,7 @@ class CourseController @Inject()(
       request.body.validate[ApiRequest[CreateCourseRequest]].withData { createCourseRequest =>
         val CreateCourseRequest(title, subtitle, thumbnailUrl, coverUrl, price, promotionPrice, saleType, tags, courseIntro, courseMenu, courseInfo, flashSaleStartAt, flashSaleEndAt, saleStock) = createCourseRequest
         val courseId = UUID.randomUUID()
-        db.run(CourseRepository.rows += tables.CourseEntity(
+        db.run(CourseRepository.rows += entities.CourseEntity(
           courseId = courseId,
           title = title,
           subtitle = subtitle,

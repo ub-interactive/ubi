@@ -6,7 +6,7 @@ import java.util.UUID
 import com.ubi.ccat.controllers.api.ApiResponseData
 import com.ubi.ccat.controllers.api.console.course.ListCourseResponse.Course
 import com.ubi.ccat.enums.CourseSaleTypeValue
-import com.ubi.ccat.tables.CourseEntity.Tags
+import com.ubi.ccat.entities.CourseEntity.Tags
 import play.api.libs.json.{Json, OFormat}
 
 final case class ListCourseResponse(

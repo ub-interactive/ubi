@@ -4,7 +4,7 @@ import java.time.Instant
 
 import com.ubi.ccat.controllers.api.ApiRequestData
 import com.ubi.ccat.enums.CourseSaleTypeValue
-import com.ubi.ccat.tables.CourseEntity.Tags
+import com.ubi.ccat.entities.CourseEntity.Tags
 import play.api.libs.json.{Json, OFormat}
 
 final case class CreateCourseRequest(

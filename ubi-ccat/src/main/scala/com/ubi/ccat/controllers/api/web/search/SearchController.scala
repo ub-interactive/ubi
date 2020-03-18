@@ -6,8 +6,8 @@ import javax.inject.Inject
 import play.api.Logging
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.mvc.{Action, AnyContent}
-import com.ubi.ccat.tables.Tables._
-import com.ubi.ccat.tables.Tables.profile.api._
+import com.ubi.ccat.entities.Tables._
+import com.ubi.ccat.entities.Tables.profile.api._
 import scala.concurrent.ExecutionContext
 
 class SearchController @Inject()(

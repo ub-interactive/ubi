@@ -1,4 +1,4 @@
-package com.ubi.ccat.tables
+package com.ubi.ccat.entities
 
 import java.util.UUID
 

@@ -1,4 +1,4 @@
-package com.ubi.ccat.tables
+package com.ubi.ccat.entities
 
 object Tables extends Tables {
   val SCHEMA_NAME = "ubi_ccat"

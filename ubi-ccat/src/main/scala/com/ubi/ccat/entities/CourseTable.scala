@@ -1,4 +1,4 @@
-package com.ubi.ccat.tables
+package com.ubi.ccat.entities
 
 import java.time.Instant
 import java.util.UUID
