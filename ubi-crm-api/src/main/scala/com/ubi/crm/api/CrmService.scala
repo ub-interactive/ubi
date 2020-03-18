@@ -8,7 +8,7 @@ trait CrmService extends UserService {
 
   override def descriptor: Descriptor = {
     import Service._
-    named("crm-service").withCalls(
+    named("ubi-crm-service").withCalls(
       pathCall("/crm/user/get?mobile", userGet _),
       pathCall("/crm/user/create", userCreate _),
     )
