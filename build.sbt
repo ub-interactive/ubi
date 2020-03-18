@@ -50,6 +50,7 @@ lazy val `ubi-ccat` = (project in file("ubi-ccat"))
       filters,
       specs2,
       "ch.qos.logback" % "logback-classic" % "1.2.3",
+      "org.gnieh" % "logback-journal" % "0.3.0",
 
       /** database */
       //      jdbc,
@@ -114,7 +115,8 @@ lazy val `ubi-crm-impl` = (project in file("ubi-crm-impl"))
       lagomScaladslPersistenceJdbc,
       "mysql" % "mysql-connector-java" % "8.0.19",
       "com.softwaremill.macwire" %% "macros" % "2.3.3" % "provided",
-      "com.github.etaty" %% "rediscala" % "1.9.0"
+      "com.github.etaty" %% "rediscala" % "1.9.0",
+      "org.gnieh" % "logback-journal" % "0.3.0",
     )
   )
   .dependsOn(`ubi-crm-api`)
@@ -149,7 +151,8 @@ lazy val `ubi-order-impl` = (project in file("ubi-order-impl"))
       lagomScaladslPersistenceJdbc,
       "mysql" % "mysql-connector-java" % "8.0.19",
       "com.softwaremill.macwire" %% "macros" % "2.3.3" % "provided",
-      "com.github.etaty" %% "rediscala" % "1.9.0"
+      "com.github.etaty" %% "rediscala" % "1.9.0",
+      "org.gnieh" % "logback-journal" % "0.3.0",
     )
   )
   .dependsOn(`ubi-order-api`)
@@ -184,7 +187,8 @@ lazy val `ubi-finance-impl` = (project in file("ubi-finance-impl"))
       lagomScaladslPersistenceJdbc,
       "mysql" % "mysql-connector-java" % "8.0.19",
       "com.softwaremill.macwire" %% "macros" % "2.3.3" % "provided",
-      "com.github.etaty" %% "rediscala" % "1.9.0"
+      "com.github.etaty" %% "rediscala" % "1.9.0",
+      "org.gnieh" % "logback-journal" % "0.3.0",
     )
   )
   .dependsOn(`ubi-finance-api`)
