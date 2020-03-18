@@ -61,7 +61,7 @@ class WechatModule extends AbstractModule {
   private def getWechatPayServiceImpl(wxConfig: Configuration): WxPayService = {
     val wxPayConfig = new WxPayConfig()
     wxPayConfig.setAppId(wxConfig.get[String]("app-id"))
-    wxPayConfig.setMchId(wxConfig.get[String]("m-id"))
+    wxPayConfig.setMchId(wxConfig.get[String]("mc-id"))
     wxPayConfig.setMchKey(wxConfig.get[String]("mc-key"))
     val wxPayServiceImpl = new WxPayServiceImpl
     wxPayServiceImpl.setConfig(wxPayConfig)

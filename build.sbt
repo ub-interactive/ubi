@@ -116,6 +116,7 @@ lazy val `ubi-crm-impl` = (project in file("ubi-crm-impl"))
       "mysql" % "mysql-connector-java" % "8.0.19",
       "com.softwaremill.macwire" %% "macros" % "2.3.3" % "provided",
       "com.github.etaty" %% "rediscala" % "1.9.0",
+      "ch.qos.logback" % "logback-classic" % "1.2.3",
       "org.gnieh" % "logback-journal" % "0.3.0",
     )
   )
@@ -152,6 +153,7 @@ lazy val `ubi-order-impl` = (project in file("ubi-order-impl"))
       "mysql" % "mysql-connector-java" % "8.0.19",
       "com.softwaremill.macwire" %% "macros" % "2.3.3" % "provided",
       "com.github.etaty" %% "rediscala" % "1.9.0",
+      "ch.qos.logback" % "logback-classic" % "1.2.3",
       "org.gnieh" % "logback-journal" % "0.3.0",
     )
   )
@@ -188,6 +190,7 @@ lazy val `ubi-finance-impl` = (project in file("ubi-finance-impl"))
       "mysql" % "mysql-connector-java" % "8.0.19",
       "com.softwaremill.macwire" %% "macros" % "2.3.3" % "provided",
       "com.github.etaty" %% "rediscala" % "1.9.0",
+      "ch.qos.logback" % "logback-classic" % "1.2.3",
       "org.gnieh" % "logback-journal" % "0.3.0",
     )
   )
