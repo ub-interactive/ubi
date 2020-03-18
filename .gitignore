@@ -6,3 +6,4 @@ uploaded
 application.conf
 application_prod.conf
 logback-test.xml
+deployment
