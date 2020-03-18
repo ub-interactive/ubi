@@ -19,7 +19,7 @@ class ServiceModule extends AbstractModule {
     actorSystem: ActorSystem,
     configuration: Configuration
   ): RedisClient = {
-    val redisConfig = configuration.get[RedisConfig]("redis.instances.default")
+    val redisConfig = configuration.get[RedisConfig]("redis.instance")
     RedisClient(host = redisConfig.host, password = Some(redisConfig.password), port = redisConfig.port, db = Some(redisConfig.database))(_system = actorSystem)
   }
 }
