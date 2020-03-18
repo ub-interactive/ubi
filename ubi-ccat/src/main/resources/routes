@@ -11,8 +11,8 @@ GET         /api/web/user/get-wechat-auth-url                  com.ubi.ccat.cont
 GET         /api/web/user/get-wechat-user-info                 com.ubi.ccat.controllers.api.web.user.UserController.getWechatUserInfo(code: String)
 GET         /api/web/user/get-wechat-js-api-config             com.ubi.ccat.controllers.api.web.user.UserController.getWechatJsApiConfig(url: String)
 POST        /api/web/user/create-user                          com.ubi.ccat.controllers.api.web.user.UserController.createUser()
-POST        /api/web/user/send-mobile-verification-code        com.ubi.ccat.controllers.api.web.user.UserController.sendMobileVerificationCode(mobile: String)
-POST        /api/web/user/verify-mobile-code                   com.ubi.ccat.controllers.api.web.user.UserController.verifyMobileCode(mobile: String, code: String)
+GET         /api/web/user/send-mobile-verification-code        com.ubi.ccat.controllers.api.web.user.UserController.sendMobileVerificationCode(mobile: String)
+GET         /api/web/user/verify-mobile-code                   com.ubi.ccat.controllers.api.web.user.UserController.verifyMobileCode(mobile: String, code: String)
 
 GET         /api/console/course/list                           com.ubi.ccat.controllers.api.console.course.CourseController.listCourse
 POST        /api/console/course/update                         com.ubi.ccat.controllers.api.console.course.CourseController.updateCourse(course_id : java.util.UUID)

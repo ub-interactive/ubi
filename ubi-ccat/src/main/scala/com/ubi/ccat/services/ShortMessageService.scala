@@ -12,7 +12,7 @@ import redis.RedisClient
 
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Random, Success, Try}
+import scala.util.Random
 
 class ShortMessageService @Inject()(
   aliCloudServiceConfig: AliCloudServiceConfig,
@@ -23,7 +23,19 @@ class ShortMessageService @Inject()(
   val profile: DefaultProfile = DefaultProfile.getProfile(aliCloudServiceConfig.regionId, aliCloudServiceConfig.accessKey, aliCloudServiceConfig.accessSecret)
   val client: DefaultAcsClient = new DefaultAcsClient(profile)
 
-  def sendSms(message: ShortMessageService.SmsMessage): Try[String] = {
+  private def withRequest(process: CommonRequest => CommonRequest): Future[SmsMessageResponse] = {
+    val request = new CommonRequest()
+    request.setMethod(MethodType.POST)
+    request.setDomain("dysmsapi.aliyuncs.com")
+    request.setVersion("2017-05-25")
+    request.setAction("SendSms")
+    request.putQueryParameter("RegionId", aliCloudServiceConfig.regionId)
+    request.putQueryParameter("SignName", aliCloudServiceConfig.signName)
+
+    Future(Json.parse(client.getCommonResponse(process(request)).getData).validate[SmsMessageResponse].get)
+  }
+
+  def sendSms(message: ShortMessageService.SmsMessage): Future[String] = {
     withRequest { request =>
       request.putQueryParameter("PhoneNumbers", message.phoneNumbers.mkString(","))
       request.putQueryParameter("TemplateCode", message.templateCode)
@@ -32,54 +44,42 @@ class ShortMessageService @Inject()(
     }.map(_.BizId)
   }
 
-
-  private def mobileVerificationKey(mobile: String): String = {
-    s"MOBILE_VERIFICATION_$mobile"
+  private def getMobileVerificationCodeKey(mobile: String): String = {
+    s"MOBILE_VERIFICATION_CODE_$mobile"
   }
 
   def sendMobileVerificationCode(mobile: String): Future[Done.type] = {
-    val key = mobileVerificationKey(mobile)
-    for {
-      codeOpt <- redisClient.get[String](key)
-      _ <- codeOpt match {
-        case Some(_) => Future.failed(new IllegalStateException("mobile.verification.too.fast"))
-        case None =>
-          val code: String = Random.between(100000, 1000000).toString
-          redisClient.set(key, code, Some(5.minute.toSeconds)).flatMap {
-            case true => sendSms(ShortMessageService.MobileVerifyMessage(
-              phoneNumber = mobile,
-              code = code
-            )) match {
-              case Failure(exception) => Future.failed(exception)
-              case Success(value) => Future.successful(value)
-            }
-            case false => Future.failed(new IllegalStateException("failed.to.cache.token"))
-          }
-      }
-    } yield Done
+    val semaphonreKey = s"MOBILE_VERIFICATION_SEMAPHORE_$mobile"
+    val codeKey = getMobileVerificationCodeKey(mobile)
+    redisClient.get(semaphonreKey).flatMap {
+      case Some(_) =>
+        Future.failed(new IllegalStateException("mobile.verification.too.fast"))
+      case None =>
+        for {
+          _ <- redisClient.set(semaphonreKey, "", Some(1.minute.toSeconds))
+          code = Random.between(100000, 1000000).toString
+          _ <- redisClient.set(codeKey, code, Some(5.minute.toSeconds))
+          _ <- sendSms(ShortMessageService.MobileVerifyMessage(
+            phoneNumber = mobile,
+            code = code
+          ))
+        } yield Done
+    }
   }
 
   def verifyMobileCode(
     mobile: String,
     code: String
   ): Future[Boolean] = {
-    val key = mobileVerificationKey(mobile)
-    redisClient.get[String](key).map {
-      case Some(value) if value == code => true
-      case None => false
+    val key = getMobileVerificationCodeKey(mobile)
+    redisClient.get[String](key).flatMap {
+      case Some(value) if value == code => redisClient.del(key).map(_ => true)
+      case Some(value) if value != code => Future.successful(false)
+      case None => Future.successful(false)
     }
   }
 
-  private def withRequest(process: CommonRequest => CommonRequest): Try[SmsMessageResponse] = {
-    val request = new CommonRequest()
-    request.setMethod(MethodType.POST)
-    request.setDomain("dysmsapi.aliyuncs.com")
-    request.setVersion("2017-05-25")
-    request.setAction("SendSms")
-    request.putQueryParameter("RegionId", aliCloudServiceConfig.regionId)
-    request.putQueryParameter("SignName", aliCloudServiceConfig.signName)
-    Try(Json.parse(client.getCommonResponse(process(request)).getData).validate[SmsMessageResponse].get)
-  }
+
 }
 
 object ShortMessageService {
