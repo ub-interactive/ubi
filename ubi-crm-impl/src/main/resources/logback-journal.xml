@@ -12,11 +12,11 @@
         <appender-ref ref="JOURNAL"/>
     </appender>
 
-    <logger name="play" level="WARN" />
-    <logger name="akka" level="WARN" />
-    <logger name="com.lightbend.lagom" level="WARN" />
+    <logger name="play" level="INFO" />
+    <logger name="akka" level="INFO" />
+    <logger name="com.lightbend.lagom" level="INFO" />
 
-    <root level="WARN">
+    <root level="INFO">
         <appender-ref ref="ASYNCJOURNAL"/>
     </root>
 
