@@ -2,24 +2,25 @@
 
     <conversionRule conversionWord="coloredLevel" converterClass="com.lightbend.lagom.internal.logback.ColoredLevel" />
 
-    <appender name="JOURNAL" class="org.gnieh.logback.SystemdJournalAppender" >
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>[%level] %logger{15} - %message%n%xException{10}</pattern>
+            <pattern>%date{"HH:mm:ss.SSS'Z'",UTC} %coloredLevel %logger - %msg%n</pattern>
         </encoder>
     </appender>
 
-    <appender name="ASYNCJOURNAL" class="ch.qos.logback.classic.AsyncAppender">
-        <appender-ref ref="JOURNAL"/>
+    <appender name="ASYNCSTDOUT" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="STDOUT" />
     </appender>
 
-    <logger name="play" level="WARN" />
-    <logger name="akka" level="WARN" />
-    <logger name="com.lightbend.lagom" level="WARN" />
+    <!-- Set logging for all Play library classes to INFO -->
+    <logger name="play" level="INFO" />
+    <!-- Set logging for all Akka library classes to INFO -->
+    <logger name="akka" level="INFO" />
+    <!-- Set logging for all Lagom library classes to INFO -->
+    <logger name="com.lightbend.lagom" level="INFO" />
 
-    <root level="WARN">
-        <appender-ref ref="ASYNCJOURNAL"/>
+    <root level="INFO">
+        <appender-ref ref="ASYNCSTDOUT" />
     </root>
-
-    <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
 
 </configuration>

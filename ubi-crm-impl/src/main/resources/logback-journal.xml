@@ -1,0 +1,25 @@
+<configuration>
+
+    <conversionRule conversionWord="coloredLevel" converterClass="com.lightbend.lagom.internal.logback.ColoredLevel" />
+
+    <appender name="JOURNAL" class="org.gnieh.logback.SystemdJournalAppender" >
+        <encoder>
+            <pattern>[%level] %logger{15} - %message%n%xException{10}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNCJOURNAL" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="JOURNAL"/>
+    </appender>
+
+    <logger name="play" level="WARN" />
+    <logger name="akka" level="WARN" />
+    <logger name="com.lightbend.lagom" level="WARN" />
+
+    <root level="WARN">
+        <appender-ref ref="ASYNCJOURNAL"/>
+    </root>
+
+    <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
+
+</configuration>
