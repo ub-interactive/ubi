@@ -5,7 +5,7 @@ import java.time.Instant
 import akka.Done
 import com.ubi.ccat.controllers.api.ApiRequest
 import com.ubi.ccat.controllers.api.web.WebApiController
-import com.ubi.ccat.services.ShortMessageService
+import com.ubi.ccat.providers.ShortMessageService
 import com.ubi.crm.api.CrmService
 import com.ubi.crm.api.enums.UserGender
 import javax.inject.Inject
