@@ -9,7 +9,7 @@ import play.api.Environment
 import play.api.inject.ApplicationLifecycle
 import play.api.libs.ws.WSClient
 
-abstract class CrmServiceFactory extends LagomClientFactory("crm-service", classOf[CrmServiceFactory].getClassLoader)
+abstract class UbiCrmServiceFactory extends LagomClientFactory("ubi-crm-service", classOf[UbiCrmServiceFactory].getClassLoader)
 
 class CrmServiceProvider @Inject()(
   client: WSClient,
@@ -20,7 +20,7 @@ class CrmServiceProvider @Inject()(
 ) extends Provider[CrmService] {
   override def get(): CrmService = {
 
-    val factory: CrmServiceFactory with CircuitBreakerComponents = new CrmServiceFactory with ConfigurationServiceLocatorComponents {
+    val factory: UbiCrmServiceFactory with CircuitBreakerComponents = new UbiCrmServiceFactory with ConfigurationServiceLocatorComponents {
       override val wsClient: WSClient = client
       override val materializer: Materializer = mat
       override val actorSystem: ActorSystem = system
