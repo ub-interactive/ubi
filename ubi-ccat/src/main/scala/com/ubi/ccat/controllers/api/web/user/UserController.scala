@@ -19,11 +19,11 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
 
 class UserController @Inject()(
-  environment: Environment,
   crmService: CrmService,
   wxMpService: WxMpService,
   shortMessageService: ShortMessageService,
-  val dbConfigProvider: DatabaseConfigProvider
+  val dbConfigProvider: DatabaseConfigProvider,
+  val environment: Environment
 )
   (implicit val ec: ExecutionContext) extends WebApiController {
 

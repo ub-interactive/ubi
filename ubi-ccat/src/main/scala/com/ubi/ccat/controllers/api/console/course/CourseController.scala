@@ -10,6 +10,7 @@ import com.ubi.ccat.entities.CourseEntity
 import com.ubi.ccat.entities.Tables._
 import com.ubi.ccat.entities.Tables.profile.api._
 import javax.inject.Inject
+import play.api.Environment
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, AnyContent}
@@ -17,7 +18,8 @@ import play.api.mvc.{Action, AnyContent}
 import scala.concurrent.ExecutionContext
 
 class CourseController @Inject()(
-  val dbConfigProvider: DatabaseConfigProvider
+  val dbConfigProvider: DatabaseConfigProvider,
+  val environment: Environment
 )
   (implicit val ec: ExecutionContext) extends WebApiController {
 

@@ -5,14 +5,15 @@ import com.ubi.ccat.controllers.api.{PaginationParameter, PaginationResponseData
 import com.ubi.ccat.entities.Tables._
 import com.ubi.ccat.entities.Tables.profile.api._
 import javax.inject.Inject
-import play.api.Logging
+import play.api.{Environment, Logging}
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.mvc.{Action, AnyContent}
 
 import scala.concurrent.ExecutionContext
 
 class SearchController @Inject()(
-  val dbConfigProvider: DatabaseConfigProvider
+  val dbConfigProvider: DatabaseConfigProvider,
+  val environment: Environment
 )
   (implicit val ec: ExecutionContext) extends WebApiController with Logging {
 
@@ -34,7 +35,7 @@ class SearchController @Inject()(
             courseId = course.courseId,
             title = course.title,
             subtitle = course.subtitle,
-            thumbnailUrl = course.thumbnailUrl.map(com.ubi.ccat.controllers.routes.ApplicationController.file(_).absoluteURL(true)),
+            thumbnailUrl = course.thumbnailUrl.map(_.absoluteURL),
             price = course.price,
             promotionPrice = course.promotionPrice,
             saleType = course.saleType,

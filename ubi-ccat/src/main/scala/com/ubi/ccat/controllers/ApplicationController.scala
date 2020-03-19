@@ -1,7 +1,6 @@
 package com.ubi.ccat.controllers
 
 import com.ubi.ccat.controllers.api.web.WebApiController
-import controllers.AssetsFinder
 import javax.inject.Inject
 import play.api.Environment
 import play.api.db.slick.DatabaseConfigProvider
@@ -11,9 +10,8 @@ import play.shaded.oauth.org.apache.commons.codec.digest.DigestUtils
 import scala.concurrent.ExecutionContext
 
 class ApplicationController @Inject()(
-  environment: Environment,
-  as: AssetsFinder,
-  val dbConfigProvider: DatabaseConfigProvider
+  val dbConfigProvider: DatabaseConfigProvider,
+  val environment: Environment
 )
   (implicit val ec: ExecutionContext) extends WebApiController {
 

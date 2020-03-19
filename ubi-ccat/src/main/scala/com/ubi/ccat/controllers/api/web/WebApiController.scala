@@ -1,8 +1,19 @@
 package com.ubi.ccat.controllers.api.web
 
 import com.ubi.ccat.controllers.api.ApiController
+import play.api.mvc.RequestHeader
+import play.api.{Environment, Mode}
 
 trait WebApiController extends ApiController {
+  def environment: Environment
+
+  implicit class FileHelper(path: String)
+    (implicit requestHeader: RequestHeader) {
+    def absoluteURL: String = {
+      com.ubi.ccat.controllers.routes.ApplicationController.file(path).absoluteURL(environment.mode != Mode.Dev)
+    }
+  }
+
   //
   //  private def AppMetaAction: ActionRefiner[SecuredRequest, AppSecuredRequest] = new ActionRefiner[SecuredRequest, AppSecuredRequest] {
   //    override val executionContext: ExecutionContext = ec

@@ -10,10 +10,13 @@ import play.api.db.slick.DatabaseConfigProvider
 import play.api.mvc.{Action, AnyContent}
 import com.ubi.ccat.entities.Tables._
 import com.ubi.ccat.entities.Tables.profile.api._
+import play.api.{Environment, Mode}
+
 import scala.concurrent.ExecutionContext
 
 class HomeController @Inject()(
-  val dbConfigProvider: DatabaseConfigProvider
+  val dbConfigProvider: DatabaseConfigProvider,
+  val environment: Environment
 )
   (implicit val ec: ExecutionContext) extends WebApiController {
 
@@ -22,12 +25,12 @@ class HomeController @Inject()(
       GetHomeContentResponse(
         banners = Seq(
           GetHomeContentResponse.Banner(
-            coverUrl = com.ubi.ccat.controllers.routes.ApplicationController.file("banner_01.png").absoluteURL(true),
+            coverUrl = "banner_01.png".absoluteURL,
             bannerLinkType = BannerLinkType.Subject,
             subjectId = UUID.fromString("3c04acd0-9e72-4be7-9a38-ae419da401ac")
           ),
           GetHomeContentResponse.Banner(
-            coverUrl = com.ubi.ccat.controllers.routes.ApplicationController.file("banner_02.png").absoluteURL(true),
+            coverUrl = "banner_02.png".absoluteURL,
             bannerLinkType = BannerLinkType.Subject,
             subjectId = UUID.fromString("1710adb1-c692-408c-922e-f918664289d4")
           )
@@ -63,7 +66,7 @@ class HomeController @Inject()(
                   courseId = course.courseId,
                   title = course.title,
                   subtitle = course.subtitle,
-                  thumbnailUrl = course.thumbnailUrl.map(com.ubi.ccat.controllers.routes.ApplicationController.file(_).absoluteURL(true)),
+                  thumbnailUrl = course.thumbnailUrl.map(_.absoluteURL),
                   price = course.price,
                   promotionPrice = course.promotionPrice,
                   saleType = course.saleType,
