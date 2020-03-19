@@ -49,12 +49,16 @@ class UserController @Inject()(
         case Success(value) => GetWechatUserInfoResponse(
           openId = value.getOpenId,
           nickname = value.getNickname,
-          sex = value.getSex,
+          gender = value.getSex match {
+            case 0 => UserGender.Secret
+            case 1 => UserGender.Male
+            case 2 => UserGender.Female
+          },
           language = value.getLanguage,
           city = value.getCity,
           province = value.getProvince,
           country = value.getCountry,
-          headImgUrl = value.getHeadImgUrl
+          avatarUrl = value.getHeadImgUrl
         ).ok
       }
     }
