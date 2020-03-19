@@ -49,7 +49,7 @@ class UserController @Inject()(
         case Success(value) => GetWechatUserInfoResponse(
           openId = value.getOpenId,
           nickname = value.getNickname,
-          gender = value.getSex match {
+          gender = value.getSex.toInt match {
             case 0 => UserGender.Secret
             case 1 => UserGender.Male
             case 2 => UserGender.Female
