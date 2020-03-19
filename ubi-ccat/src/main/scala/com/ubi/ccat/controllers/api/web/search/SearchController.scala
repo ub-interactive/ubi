@@ -2,12 +2,13 @@ package com.ubi.ccat.controllers.api.web.search
 
 import com.ubi.ccat.controllers.api.web.WebApiController
 import com.ubi.ccat.controllers.api.{PaginationParameter, PaginationResponseData}
+import com.ubi.ccat.entities.Tables._
+import com.ubi.ccat.entities.Tables.profile.api._
 import javax.inject.Inject
 import play.api.Logging
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.mvc.{Action, AnyContent}
-import com.ubi.ccat.entities.Tables._
-import com.ubi.ccat.entities.Tables.profile.api._
+
 import scala.concurrent.ExecutionContext
 
 class SearchController @Inject()(
@@ -20,9 +21,9 @@ class SearchController @Inject()(
     page: PaginationParameter
   ): Action[AnyContent] = {
     Action.async { implicit request =>
-logger.info(keyword)
 
       val courses = CourseRepository.rows.filter(_.title like s"%$keyword%")
+      logger.info(courses.result.statements.mkString(","))
 
       for {
         total <- db.run(courses.size.result)
@@ -33,7 +34,7 @@ logger.info(keyword)
             courseId = course.courseId,
             title = course.title,
             subtitle = course.subtitle,
-            thumbnailUrl = course.thumbnailUrl.map(com.ubi.ccat.controllers.routes.ApplicationController.file(_).absoluteURL()),
+            thumbnailUrl = course.thumbnailUrl.map(com.ubi.ccat.controllers.routes.ApplicationController.file(_).absoluteURL(true)),
             price = course.price,
             promotionPrice = course.promotionPrice,
             saleType = course.saleType,

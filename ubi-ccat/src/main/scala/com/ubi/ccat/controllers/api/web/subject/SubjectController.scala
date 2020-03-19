@@ -42,7 +42,7 @@ class SubjectController @Inject()(
                 courseId = course.courseId,
                 title = course.title,
                 subtitle = course.subtitle,
-                thumbnailUrl = course.thumbnailUrl.map(com.ubi.ccat.controllers.routes.ApplicationController.file(_).absoluteURL()),
+                thumbnailUrl = course.thumbnailUrl.map(com.ubi.ccat.controllers.routes.ApplicationController.file(_).absoluteURL(true)),
                 price = course.price,
                 promotionPrice = course.promotionPrice,
                 saleType = course.saleType,

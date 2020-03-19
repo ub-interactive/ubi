@@ -66,11 +66,11 @@ trait CourseTable {
     }
 
     def title = {
-      column[String]("title")
+      column[String]("title", O.Length(255, varying = true))
     }
 
     def subtitle = {
-      column[Option[String]]("subtitle")
+      column[Option[String]]("subtitle", O.Length(255, varying = true))
     }
 
     def thumbnailUrl = {

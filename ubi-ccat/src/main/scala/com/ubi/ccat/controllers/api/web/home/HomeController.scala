@@ -22,12 +22,12 @@ class HomeController @Inject()(
       GetHomeContentResponse(
         banners = Seq(
           GetHomeContentResponse.Banner(
-            coverUrl = com.ubi.ccat.controllers.routes.ApplicationController.file("banner_01.png").absoluteURL(),
+            coverUrl = com.ubi.ccat.controllers.routes.ApplicationController.file("banner_01.png").absoluteURL(true),
             bannerLinkType = BannerLinkType.Subject,
             subjectId = UUID.fromString("3c04acd0-9e72-4be7-9a38-ae419da401ac")
           ),
           GetHomeContentResponse.Banner(
-            coverUrl = com.ubi.ccat.controllers.routes.ApplicationController.file("banner_02.png").absoluteURL(),
+            coverUrl = com.ubi.ccat.controllers.routes.ApplicationController.file("banner_02.png").absoluteURL(true),
             bannerLinkType = BannerLinkType.Subject,
             subjectId = UUID.fromString("1710adb1-c692-408c-922e-f918664289d4")
           )
@@ -63,7 +63,7 @@ class HomeController @Inject()(
                   courseId = course.courseId,
                   title = course.title,
                   subtitle = course.subtitle,
-                  thumbnailUrl = course.thumbnailUrl.map(com.ubi.ccat.controllers.routes.ApplicationController.file(_).absoluteURL()),
+                  thumbnailUrl = course.thumbnailUrl.map(com.ubi.ccat.controllers.routes.ApplicationController.file(_).absoluteURL(true)),
                   price = course.price,
                   promotionPrice = course.promotionPrice,
                   saleType = course.saleType,

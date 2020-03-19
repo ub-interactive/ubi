@@ -23,7 +23,7 @@ class CourseController @Inject()(
           courseId = value.courseId,
           title = value.title,
           subtitle = value.subtitle,
-          coverUrl = com.ubi.ccat.controllers.routes.ApplicationController.file(value.coverUrl).absoluteURL(),
+          coverUrl = com.ubi.ccat.controllers.routes.ApplicationController.file(value.coverUrl).absoluteURL(true),
           price = value.price,
           promotionPrice = value.promotionPrice,
           saleType = value.saleType,
