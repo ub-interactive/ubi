@@ -85,6 +85,57 @@ lazy val `ubi-ccat` = (project in file("ubi-ccat"))
   )
   .dependsOn(`ubi-crm-api`)
 
+lazy val `ubi-qdog` = (project in file("ubi-qdog"))
+  .enablePlugins(PlayScala)
+  .disablePlugins(PlayLayoutPlugin)
+  .settings(
+    scalaVersion := "2.13.1",
+    maintainer := "83225506@qq.com",
+    sources in(Compile, doc) := Seq.empty,
+    publishArtifact in(Compile, packageDoc) := false,
+    organization := "com.ubi.api",
+    name := "ubi-ccat",
+    libraryDependencies ++= Seq(
+      lagomScaladslClient,
+      guice,
+      ws,
+      filters,
+      specs2,
+      "ch.qos.logback" % "logback-classic" % "1.2.3",
+      "org.gnieh" % "logback-journal" % "0.3.0",
+
+      /** database */
+      //      jdbc,
+      //      evolutions,
+      "mysql" % "mysql-connector-java" % "8.0.19",
+      "com.typesafe.slick" %% "slick" % slickVersion,
+      "com.typesafe.slick" %% "slick-hikaricp" % slickVersion,
+      "com.typesafe.play" %% "play-slick" % playSlickVersion,
+      "com.typesafe.play" %% "play-slick-evolutions" % playSlickVersion,
+
+      /** redis */
+      cacheApi,
+      "com.github.etaty" %% "rediscala" % "1.9.0",
+
+      /** auth */
+      "com.mohiva" %% "play-silhouette" % playSilhouetteVersion,
+      "com.mohiva" %% "play-silhouette-password-bcrypt" % playSilhouetteVersion,
+      "com.mohiva" %% "play-silhouette-crypto-jca" % playSilhouetteVersion,
+      "com.mohiva" %% "play-silhouette-persistence" % playSilhouetteVersion,
+      "com.mohiva" %% "play-silhouette-testkit" % playSilhouetteVersion % "test",
+      "com.mohiva" %% "play-silhouette-cas" % playSilhouetteVersion,
+      "com.mohiva" %% "play-silhouette-totp" % playSilhouetteVersion,
+
+      /** weixin api */
+      "com.github.binarywang" % "weixin-java-mp" % weixinJavaVersion,
+      "com.github.binarywang" % "weixin-java-pay" % weixinJavaVersion,
+      "com.github.binarywang" % "weixin-java-open" % weixinJavaVersion,
+      "com.github.binarywang" % "weixin-java-miniapp" % weixinJavaVersion,
+
+      "com.aliyun" % "aliyun-java-sdk-core" % "4.1.0"
+    )
+  )
+
 /* crm */
 lazy val `ubi-crm-api` = (project in file("ubi-crm-api"))
   .settings(scalaVersion := "2.13.1",
